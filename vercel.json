@@ -1,0 +1,19 @@
+{
+
+  "version": 2,
+
+  "name": "h02-API-V1",
+
+  "builds": [
+
+    { "src": "src/index.ts", "use": "@vercel/node" }
+
+  ],
+
+  "routes": [
+
+    { "src": "/(.*)", "dest": "src/index.ts" }
+
+  ]
+
+}
