@@ -5,6 +5,8 @@ import {mapUserToViewModel} from "../mappers/mapUserToViewModel";
 import {UsersPaginationData} from "../types/usersPaginationData";
 import {UserViewModelWithPaginator} from "../types/userViewModelWithPaginator";
 import {mapToUsersViewModelWithPaginator} from "../mappers/mapToUsersViewModelWithPaginator";
+import {UserAuthInfo} from "../types/userAuthInfo";
+import {mapToUserAuthInfo} from "../mappers/mapToUserAuthInfo";
 
 export const usersQueryRepository = {
     async findById(id: string): Promise<UserViewModel | null> {
@@ -13,6 +15,14 @@ export const usersQueryRepository = {
             return null;
         }
         return mapUserToViewModel(foundUser);
+    },
+
+    async findUserAuthInfo(id: string): Promise<UserAuthInfo | null> {
+        const foundUser = await usersCollection.findOne({_id: new ObjectId(id)});
+        if (!foundUser) {
+            return null;
+        }
+        return mapToUserAuthInfo(foundUser);
     },
 
     async findAll(data: UsersPaginationData): Promise<UserViewModelWithPaginator> {
