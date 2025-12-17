@@ -6,10 +6,13 @@ export const authHandler = async (req: Request, res: Response) => {
     const loginOrEmail = req.body.loginOrEmail;
     const password = req.body.password;
 
-    const authResult = await authService.checkCredentials(loginOrEmail, password);
-    if (authResult) {
-        res.sendStatus(204);
-        return;
+    const authResultJWT = await authService.loginUser(loginOrEmail, password);
+    if (authResultJWT) {
+        res
+            .status(200)
+            .json(authResultJWT);
+    } else {
+        res.sendStatus(401);
     }
-    res.sendStatus(401);
+
 }
