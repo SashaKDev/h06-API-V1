@@ -2,8 +2,13 @@ import {Post} from "../types/post";
 import {postsRepository} from "../repositories/postsRepository";
 import {PostInputDto} from "../dto/post-input.dto";
 import {blogsService} from "../../blogs/application/blogsService";
+import {WithId} from "mongodb";
 
 export const postsService = {
+
+    async findById(id: string): Promise<WithId<Post> | null> {
+        return await postsRepository.findById(id)
+    },
 
     async create(post: PostInputDto): Promise<string | null> {
         const foundBlog = await blogsService.findById(post.blogId);
