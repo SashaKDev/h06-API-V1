@@ -11,6 +11,10 @@ import {deletePostHandler} from "./handlers/deletePostHandler";
 import {
     paginationAndSortingInputValidation
 } from "../../core/middlewares/validation/paginatoinAndSortingInputValidation";
+import {commentInputDtoValidation} from "../../comments/validation/commentsValidation";
+import {createCommentForPostHandler} from "./handlers/createCommentForPostHandler";
+import {getCommentsForPostHandler} from "./handlers/getCommentsForPostHandler";
+import {bearerAuthMiddleware} from "../../auth/middlewares/bearerAuthMiddleware";
 
 export const postsRouter = Router({});
 
@@ -42,3 +46,19 @@ postsRouter.delete('/:id',
     inputValidationResult,
     deletePostHandler
 );
+
+postsRouter.post('/:id/comments',
+    bearerAuthMiddleware,
+    idValidation,
+    commentInputDtoValidation,
+    inputValidationResult,
+    createCommentForPostHandler
+)
+
+postsRouter.get('/:id/comments',
+    idValidation,
+    paginationAndSortingInputValidation,
+    commentInputDtoValidation,
+    inputValidationResult,
+    getCommentsForPostHandler
+)

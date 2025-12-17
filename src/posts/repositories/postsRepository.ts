@@ -6,7 +6,7 @@ import {postsCollection} from "../../db/mongo.db";
 export const postsRepository = {
 
     async findById(id: string): Promise<WithId<Post> | null> {
-        return await postsRepository.findById(id);
+        return await postsCollection.findOne({_id: new ObjectId(id)});
     },
 
     async create(post: Post): Promise<string> {
