@@ -36,7 +36,7 @@ const pageSizeValidation = query('pageSize')
 
 const sortByValidation = query('sortBy')
     .default(DEFAULT_SORT_BY)
-    // .isIn(Object.values(sortByFields))
+    .isIn(Object.values(sortByFields))
     // .withMessage('sortBy invalid value');
 
 const sortDirectionValidation = query('sortDirection')
