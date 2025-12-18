@@ -6,7 +6,10 @@ export const mapCommentToViewModel = (comment: WithId<CommentType>): CommentsVie
     return {
         id: comment._id.toString(),
         content: comment.content,
-        // commentatorInfo
+        commentatorInfo: {
+            userId: comment.userId,
+            userLogin: comment.userLogin,
+        },
         createdAt: comment.createdAt,
     }
 }
