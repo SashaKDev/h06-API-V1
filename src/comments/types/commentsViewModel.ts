@@ -2,5 +2,8 @@ export type CommentsViewModel = {
     id: string,
     content: string,
     createdAt: string,
-    // commentatorInfo:
+    commentatorInfo: {
+        userId: string,
+        userLogin: string
+    },
 }
