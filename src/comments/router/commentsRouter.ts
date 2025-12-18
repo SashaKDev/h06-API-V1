@@ -10,7 +10,6 @@ import {bearerAuthMiddleware} from "../../auth/middlewares/bearerAuthMiddleware"
 export const commentsRouter = Router();
 
 commentsRouter.get('/:id',
-//     bearer auth
     idValidation,
     inputValidationResult,
     getCommentByIdHandler

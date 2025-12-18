@@ -1,4 +1,4 @@
-import {commentsCollection} from "../../db/mongo.db";
+import {commentsCollection, usersCollection} from "../../db/mongo.db";
 import {ObjectId} from "mongodb";
 import {CommentsViewModel} from "../types/commentsViewModel";
 import {mapCommentToViewModel} from "../mappers/mapCommentToViewModel";
@@ -8,8 +8,8 @@ import {mapToCommentsViewModelWithPaginator} from "../mappers/mapToCommentsViewM
 
 export const commentsQueryRepository = {
 
-    async findById(id: string): Promise<CommentsViewModel | null> {
-        const foundComment = await commentsCollection.findOne({_id: new ObjectId(id)});
+    async findById(commentId: string): Promise<CommentsViewModel | null> {
+        const foundComment = await commentsCollection.findOne({_id: new ObjectId(commentId)});
         if (!foundComment) {
             return null;
         }
