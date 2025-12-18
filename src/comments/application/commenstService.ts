@@ -1,12 +1,7 @@
-import {CommentInputModel} from "../types/commentInputModel";
 import {postsRepository} from "../../posts/repositories/postsRepository";
 import {commentsRepository} from "../repositories/commentsRepository";
 import {CommentType} from "../types/commentType";
-import {postsService} from "../../posts/application/postsService";
-import {CommentsPaginationData} from "../types/commentsPaginationData";
-import {commentsQueryRepository} from "../repositories/commentsQueryRepository";
 import {WithId} from "mongodb";
-import {usersService} from "../../users/application/usersService";
 import {usersRepository} from "../../users/repository/usersRepository";
 
 export const commentsService = {
