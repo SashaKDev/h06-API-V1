@@ -1,4 +1,4 @@
-import {commentsCollection, usersCollection} from "../../db/mongo.db";
+import {commentsCollection} from "../../db/mongo.db";
 import {ObjectId} from "mongodb";
 import {CommentsViewModel} from "../types/commentsViewModel";
 import {mapCommentToViewModel} from "../mappers/mapCommentToViewModel";
