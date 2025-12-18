@@ -10,7 +10,9 @@ export const authHandler = async (req: Request, res: Response) => {
     if (authResultJWT) {
         res
             .status(200)
-            .json(authResultJWT);
+            .json({
+                "accessToken": authResultJWT
+            });
     } else {
         res.sendStatus(401);
     }

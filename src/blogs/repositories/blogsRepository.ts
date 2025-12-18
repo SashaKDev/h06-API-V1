@@ -7,7 +7,9 @@ import {blogsCollection} from "../../db/mongo.db";
 export const blogsRepository = {
 
     async findById(id: string): Promise<WithId<Blog> | null> {
-        return await blogsCollection.findOne({_id: new ObjectId(id)});
+        const blog = await blogsCollection.findOne({_id: new ObjectId(id)});
+        console.log(blog);
+        return blog;
     },
 
     async create(blog: Blog): Promise<string> {
