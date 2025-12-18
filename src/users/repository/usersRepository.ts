@@ -5,7 +5,10 @@ import {ObjectId, WithId} from "mongodb";
 export const usersRepository = {
 
     async findById(id: string): Promise<WithId<User> | null> {
-        return usersCollection.findOne({_id: new ObjectId(id)})
+        console.log(id)
+        const user = await usersCollection.findOne({_id: new ObjectId(id)})
+        console.log(user);
+        return user;
     },
 
     async findByLoginOrEmail(loginOrEmail: string): Promise<WithId<User>[]>{

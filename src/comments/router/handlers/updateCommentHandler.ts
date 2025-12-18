@@ -8,6 +8,10 @@ export const updateCommentHandler = async (req: Request, res: Response) => {
         res.sendStatus(404);
         return;
     }
+    if (foundComment.userId !== req.userId) {
+        res.sendStatus(403);
+        return;
+    }
     const updateResult = await commentsService.updateComment(req.params.id, req.body.content);
     if (updateResult === 1) {
         res.sendStatus(204);
