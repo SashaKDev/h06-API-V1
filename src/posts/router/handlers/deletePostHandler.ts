@@ -4,7 +4,7 @@ import {postsService} from "../../application/postsService";
 export const deletePostHandler = async (req: Request, res: Response) => {
 
     const deleteResult: number = await postsService.delete(req.params.id);
-    if (!deleteResult) {
+    if (deleteResult === 0) {
         res.sendStatus(404);
         return;
     }
