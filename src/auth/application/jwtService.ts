@@ -11,6 +11,7 @@ export const jwtService = {
     async verifyJWT (token: string): Promise<string | null> {
         try {
             const payload = jwt.verify(token, SETTINGS.JWT_SECRET) as { userId: string };
+            console.log(payload);
             return payload.userId;
         } catch (e) {
             return null;

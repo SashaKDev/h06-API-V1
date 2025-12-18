@@ -1,5 +1,4 @@
 import {Request, Response} from "express";
-import {commentsService} from "../../../comments/application/commenstService";
 import {commentsQueryRepository} from "../../../comments/repositories/commentsQueryRepository";
 import {CommentsPaginationData} from "../../../comments/types/commentsPaginationData";
 import {matchedData} from "express-validator";
@@ -10,8 +9,8 @@ export const getCommentsForPostHandler = async (req: Request, res: Response) => 
     const data = matchedData(req, { locations: ['query'] });
 
     const commentsPaginationData: CommentsPaginationData = {
-        pageSize: data.pageSize,
-        pageNumber: data.pageNumber,
+        pageSize: Number(data.pageSize),
+        pageNumber: Number(data.pageNumber),
         sortBy: data.sortBy,
         sortDirection: data.sortDirection,
     }
