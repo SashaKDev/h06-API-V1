@@ -3,8 +3,7 @@ import {jwtService} from "../application/jwtService";
 
 export const bearerAuthMiddleware = async (req: Request, res: Response, next: NextFunction) => {
 
-    const auth = req.headers['authorization'];
-
+    const auth = req.headers['authorization'] as string;
     if (!auth) {
         res.sendStatus(401);
         return;
@@ -13,7 +12,7 @@ export const bearerAuthMiddleware = async (req: Request, res: Response, next: Ne
     const authType = auth.split(' ')[0];
     const authToken = auth.split(' ')[1];
 
-    if (authType !== 'bearer') {
+    if (authType !== 'Bearer') {
         res.sendStatus(401);
         return;
     }
