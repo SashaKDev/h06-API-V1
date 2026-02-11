@@ -36,13 +36,13 @@ const pageSizeValidation = query('pageSize')
 
 const sortByValidation = query('sortBy')
     .default(DEFAULT_SORT_BY)
-    .isIn(Object.values(sortByFields))
+    // .isIn(Object.values(sortByFields))
     // .withMessage('sortBy invalid value');
 
 const sortDirectionValidation = query('sortDirection')
     .default(DEFAULT_SORT_DIRECTION)
-    .isIn(['desc', 'asc'])
-    .withMessage('sortDirection must be asc or desc')
+    // .isIn(['desc', 'asc'])
+    // .withMessage('sortDirection must be asc or desc')
 
 const searchNameTermValidation = query('searchNameTerm')
     .default(null)
