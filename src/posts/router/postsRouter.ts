@@ -58,7 +58,7 @@ postsRouter.post('/:id/comments',
 postsRouter.get('/:id/comments',
     idValidation,
     paginationAndSortingInputValidation,
-    commentInputDtoValidation,
+    // commentInputDtoValidation,
     inputValidationResult,
     getCommentsForPostHandler
 )
