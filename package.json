@@ -11,6 +11,7 @@
     "jest": "jest -i"
   },
   "dependencies": {
+    "-": "^0.0.1",
     "@types/jsonwebtoken": "^9.0.10",
     "bcrypt": "^6.0.0",
     "express": "^5.1.0",
@@ -23,9 +24,11 @@
     "@types/express": "^5.0.5",
     "@types/jest": "29.5.5",
     "@types/node": "^24.10.1",
+    "@types/nodemailer": "^7.0.9",
     "@types/supertest": "^6.0.3",
     "dotenv": "^17.2.3",
     "jest": "29.7.0",
+    "nodemailer": "^8.0.1",
     "nodemon": "^3.1.11",
     "supertest": "^7.1.4",
     "ts-jest": "29.4.5",
