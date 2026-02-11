@@ -1,4 +1,4 @@
-import {usersRepository} from "../../users/repository/usersRepository";
+import {usersRepository} from "../users/repository/usersRepository";
 import bcrypt from "bcrypt";
 import {jwtService} from "./jwtService";
 
