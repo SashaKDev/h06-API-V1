@@ -1,5 +1,5 @@
 import {Request, Response} from "express";
-import {authService} from "../../application/authService";
+import {authService} from "../../../adapters/authService";
 
 export const authHandler = async (req: Request, res: Response) => {
 
