@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken"
-import {SETTINGS} from "../../core/settings/settings";
+import {SETTINGS} from "../core/settings/settings";
 
 export const jwtService = {
 
