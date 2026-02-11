@@ -6,6 +6,7 @@ import {postsRouter} from "./posts/router/postsRouter";
 import {usersRouter} from "./users/router/usersRouter";
 import {authRouter} from "./auth/router/authRouter";
 import {commentsRouter} from "./comments/router/commentsRouter";
+import {mailService} from "./adapters/mailService";
 
 
 export const setupApp = () => {
@@ -21,6 +22,10 @@ export const setupApp = () => {
     app.use(AUTH_PATH, authRouter)
     app.use(TESTING_PATH, testingRouter);
     app.use(COMMENTS_PATH, commentsRouter);
+    app.get("/test_mails", async (req, res) => {
+        await mailService.sendMail("sasha.kozel252000@gmail.com");
+        res.json({message: 'Testing mail'});
+    })
 
     return app;
 }
