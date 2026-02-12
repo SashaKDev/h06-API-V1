@@ -1,11 +1,16 @@
 import {Router} from "express";
-import {authHandler} from "./handlers/authHandler";
+import {loginHandler} from "./handlers/loginHandler";
 import {getUserInfoHandler} from "./handlers/getUserInfoHandler";
 import {bearerAuthMiddleware} from "../middlewares/bearerAuthMiddleware";
+import {registrationHandler} from "./handlers/registrationHandler";
+import {userInputDtoValidation} from "../../users/validation/userInputDtoValidation";
 
 export const authRouter = Router();
 
-authRouter.post('/login', authHandler);
+authRouter.post('/login', loginHandler);
+authRouter.post("/registration",
+    userInputDtoValidation,
+    registrationHandler)
 authRouter.get('/me',
     bearerAuthMiddleware,
     getUserInfoHandler);
