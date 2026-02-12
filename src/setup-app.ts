@@ -22,10 +22,6 @@ export const setupApp = () => {
     app.use(AUTH_PATH, authRouter)
     app.use(TESTING_PATH, testingRouter);
     app.use(COMMENTS_PATH, commentsRouter);
-    app.get("/test_mails", async (req, res) => {
-        await mailService.sendMail("sasha.kozel252000@gmail.com");
-        res.json({message: 'Testing mail'});
-    })
 
     return app;
 }
