@@ -1,6 +1,7 @@
 import {User} from "../types/user";
 import {usersCollection} from "../../db/mongo.db";
 import {ObjectId, WithId} from "mongodb";
+import {UserDBType} from "../../auth/types/UserDBType";
 
 export const usersRepository = {
 
@@ -22,6 +23,8 @@ export const usersRepository = {
         return user;
     },
     async create(newUser: User): Promise<string> {
+        console.log(111111111111111111)
+        console.log(newUser);
         const insertResult = await usersCollection.insertOne(newUser);
         return insertResult.insertedId.toString();
     },
