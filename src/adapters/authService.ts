@@ -4,6 +4,7 @@ import {jwtService} from "./jwtService";
 import {randomUUID} from "crypto";
 import {add} from "date-fns";
 import {User} from "../users/types/user";
+import {isBefore} from "date-fns";
 
 export const authService = {
 
@@ -21,7 +22,6 @@ export const authService = {
 
     async registerUser (login: string, password: string, email: string): Promise<string | null> {
         const hashPassword = await bcrypt.hash(password, 10);
-        console.log(111111111111111111);
 
         const userByLogin = await usersRepository.findByLoginOrEmail(login);
         if (userByLogin.length !== 0) {
@@ -49,13 +49,35 @@ export const authService = {
                 isConfirmed: false,
             }
         }
-        console.log(newUser);
-
-        console.log(newUser);
 
         const insertResult = await usersRepository.create(newUser);
-        console.log(insertResult);
         return insertResult;
+
+    },
+
+    async validateConfirmationCode (confirmationCode: string): Promise<number | null> {
+        console.log(confirmationCode);
+
+        const foundUser = await usersRepository.findByConfirmationCode(confirmationCode);
+        console.log(foundUser);
+        if (!foundUser) {
+            return null;
+        }
+
+        if (foundUser.emailConfirmation.isConfirmed) {
+            return null
+        }
+
+        if (!isBefore(new Date(), foundUser.emailConfirmation.expirationDate)) {
+            return null;
+        }
+
+        const updateResult = await usersRepository.updateConfirmationStatus(foundUser.email)
+        if (!updateResult) {
+            return null;
+        }
+
+        return updateResult;
 
     }
 
