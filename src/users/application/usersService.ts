@@ -24,11 +24,16 @@ export const usersService = {
         if(isEmailUnique) {
             throw new Error('email should be unique');
         }
-        const newUser = {
+        const newUser: User = {
             login: newUserDto.login,
             password: newUserDto.password,
             email: newUserDto.email,
-            createdAt: new Date().toISOString()
+            createdAt: new Date().toISOString(),
+            emailConfirmation: {
+                confirmationCode: "",
+                expirationDate: new Date(),
+                isConfirmed: false,
+            }
         }
         return await usersRepository.create(newUser)
     },
