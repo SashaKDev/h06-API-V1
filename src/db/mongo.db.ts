@@ -4,6 +4,7 @@ import {Post} from "../posts/types/post";
 import {SETTINGS} from "../core/settings/settings";
 import {User} from "../users/types/user";
 import {CommentType} from "../comments/types/commentType";
+import {UserDBType} from "../auth/types/UserDBType";
 
 export let blogsCollection: Collection<Blog>;
 export let postsCollection: Collection<Post>;
