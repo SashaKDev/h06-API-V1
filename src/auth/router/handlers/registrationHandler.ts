@@ -4,8 +4,6 @@ import {mailService} from "../../../adapters/mailService";
 
 export const registrationHandler = async (req: Request, res: Response) => {
 
-    console.log(111111111111111111111111);
-
     const login = req.body.login;
     const password = req.body.password;
     const email = req.body.email;
