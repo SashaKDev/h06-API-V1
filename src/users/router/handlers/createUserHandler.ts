@@ -10,7 +10,7 @@ export const createUserHandler = async (req: Request, res: Response) => {
     const newUserDto: UserInputDto = {
         login: req.body.login,
         password: hashPassword,
-        email: req.body.email
+        email: req.body.email,
     };
     let newUserId;
     try {
