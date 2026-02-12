@@ -34,24 +34,25 @@ export const authService = {
             console.log(userByEmail);
             return null;
         }
-
+        const confirmationCode = randomUUID();
         const newUser: User = {
             login: login,
             password: hashPassword,
             email: email,
             createdAt: new Date().toISOString(),
             emailConfirmation: {
-                confirmationCode: randomUUID(),
+                confirmationCode: confirmationCode,
                 expirationDate: add(new Date(), {
-                    hours: 1,
-                    minutes: 25,
+                    hours: 0,
+                    minutes: 1,
                 }),
                 isConfirmed: false,
             }
         }
 
         const insertResult = await usersRepository.create(newUser);
-        return insertResult;
+
+        return confirmationCode;
 
     },
 
