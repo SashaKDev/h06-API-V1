@@ -1,7 +1,6 @@
 import {User} from "../types/user";
 import {usersCollection} from "../../db/mongo.db";
 import {ObjectId, WithId} from "mongodb";
-import {UserDBType} from "../../auth/types/UserDBType";
 
 export const usersRepository = {
 
@@ -10,6 +9,14 @@ export const usersRepository = {
         const user = await usersCollection.findOne({_id: new ObjectId(id)})
         console.log(user);
         return user;
+    },
+
+    async findByConfirmationCode(confirmationCode: string): Promise< WithId<User>| null> {
+        const user = await usersCollection.findOne({"emailConfirmation.confirmationCode": confirmationCode});
+        if (!user) {
+            return null;
+        }
+        return user
     },
 
     async findByLoginOrEmail(loginOrEmail: string): Promise<WithId<User>[]>{
@@ -27,6 +34,18 @@ export const usersRepository = {
         console.log(newUser);
         const insertResult = await usersCollection.insertOne(newUser);
         return insertResult.insertedId.toString();
+    },
+
+    async updateConfirmationStatus(email: string): Promise<number> {
+        const updateResult = await usersCollection.updateOne(
+            {email: email},
+            {$set:
+                    {
+                        "emailConfirmation.isConfirmed": true
+                    }
+            }
+        );
+        return updateResult.matchedCount;
     },
 
     async deleteById (id: string): Promise<number> {
