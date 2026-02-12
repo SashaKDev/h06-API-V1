@@ -3,7 +3,7 @@ import {SETTINGS} from "../core/settings/settings";
 
 export const mailService = {
     async sendMail (email: string) {
-        const transopt = nodemailer.createTransport({
+        const transport = nodemailer.createTransport({
             service: 'gmail',
             auth: {
                 user: "sasha.val252000@gmail.com",
@@ -11,7 +11,7 @@ export const mailService = {
             }
         })
 
-        const info = await transopt.sendMail({
+        const info = await transport.sendMail({
             from: "sasha.val252000@gmail.com",
             to: email,
             subject: "Hello!",
