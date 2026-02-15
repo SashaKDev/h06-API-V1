@@ -5,6 +5,7 @@ import {randomUUID} from "crypto";
 import {add} from "date-fns";
 import {User} from "../users/types/user";
 import {isBefore} from "date-fns";
+import {mailService} from "./mailService";
 
 export const authService = {
 
@@ -20,19 +21,19 @@ export const authService = {
         return await jwtService.createJWT(foundUser._id.toString());
     },
 
-    async registerUser (login: string, password: string, email: string): Promise<string | null> {
+    async registerUser (login: string, password: string, email: string): Promise<string> {
         const hashPassword = await bcrypt.hash(password, 10);
 
         const userByLogin = await usersRepository.findByLoginOrEmail(login);
         if (userByLogin.length !== 0) {
             console.log(userByLogin);
-            return null;
+            throw new Error("login already exists");
         }
 
         const userByEmail = await usersRepository.findByLoginOrEmail(email);
         if (userByEmail.length !== 0) {
             console.log(userByEmail);
-            return null;
+            throw new Error("email already exists");
         }
         const confirmationCode = randomUUID();
         const newUser: User = {
@@ -43,8 +44,8 @@ export const authService = {
             emailConfirmation: {
                 confirmationCode: confirmationCode,
                 expirationDate: add(new Date(), {
-                    hours: 0,
-                    minutes: 1,
+                    hours: 1,
+                    minutes: 25,
                 }),
                 isConfirmed: false,
             }
@@ -79,6 +80,28 @@ export const authService = {
         }
 
         return updateResult;
+
+    },
+
+    async resendConfirmationCode (email: string): Promise<number | null> {
+
+        const foundUser = (await usersRepository.findByLoginOrEmail(email))[0];
+
+        if (!foundUser) {
+            return null;
+        }
+
+        if (foundUser.emailConfirmation.isConfirmed) {
+            return null
+        }
+
+        const newVerificationCode = randomUUID();
+        const updateCodeResult = await usersRepository.updateConfirmationCode(foundUser.email, newVerificationCode);
+        if (!updateCodeResult) {
+            return null;
+        }
+        await mailService.sendMail(email, newVerificationCode);
+        return updateCodeResult;
 
     }
 
