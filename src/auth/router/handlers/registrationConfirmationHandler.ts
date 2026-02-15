@@ -8,7 +8,15 @@ export const registrationConfirmationHandler = async (req: Request, res: Respons
 
     const codeConfirmationResult = await authService.validateConfirmationCode(confirmationCode);
     if (!codeConfirmationResult) {
-        res.sendStatus(400);
+        res.status(400)
+            .json({
+                "errorsMessages": [
+                    {
+                        "message": "Invalid code",
+                        "field": "confirmationCode",
+                    }
+                ]
+            });
         return;
     }
     res.sendStatus(204);
