@@ -48,6 +48,18 @@ export const usersRepository = {
         return updateResult.matchedCount;
     },
 
+    async updateConfirmationCode(email: string, newConfirmationCode: string ): Promise<number> {
+        const updateResult = await usersCollection.updateOne(
+            {email: email},
+            {$set:
+                    {
+                        "emailConfirmation.confirmationCode": newConfirmationCode
+                    }
+            }
+        );
+        return updateResult.matchedCount;
+    },
+
     async deleteById (id: string): Promise<number> {
         const deleteResult = await usersCollection.deleteOne({_id: new ObjectId(id)});
         return deleteResult.deletedCount
