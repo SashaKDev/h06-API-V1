@@ -13,7 +13,7 @@ export const registrationConfirmationHandler = async (req: Request, res: Respons
                 "errorsMessages": [
                     {
                         "message": "Invalid code",
-                        "field": "confirmationCode",
+                        "field": "code",
                     }
                 ]
             });
