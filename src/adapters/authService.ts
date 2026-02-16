@@ -88,11 +88,11 @@ export const authService = {
         const foundUser = (await usersRepository.findByLoginOrEmail(email))[0];
 
         if (!foundUser) {
-            return null;
+            throw new Error("email does not exist");
         }
 
         if (foundUser.emailConfirmation.isConfirmed) {
-            return null
+            throw new Error('email already confirmed');
         }
 
         const newVerificationCode = randomUUID();
