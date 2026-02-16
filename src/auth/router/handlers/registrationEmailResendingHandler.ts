@@ -5,18 +5,19 @@ export const registrationEmailResendingHandler = async (req: Request, res: Respo
 
     const email = req.body.email;
 
-    const resendResult = await authService.resendConfirmationCode(email);
-    console.log(resendResult);
-    if (!resendResult) {
-        res.status(400)
+    try {
+        await authService.resendConfirmationCode(email);
+    } catch (error: any)  {
+        res
+            .status(400)
             .json({
                 "errorsMessages": [
                     {
-                        "message": "Email already confirmed",
+                        "message": error.message,
                         "field": "email"
                     }
                 ]
-            });
+            })
         return;
     }
     res.sendStatus(204)
