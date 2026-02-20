@@ -14,7 +14,8 @@ export let commentsCollection: Collection<CommentType>;
 export const runDb = async (dbUrl: string): Promise<MongoClient> => {
 
     const client = new MongoClient(dbUrl);
-    const db: Db = client.db(SETTINGS.DB);
+    // const db: Db = client.db(SETTINGS.DB);
+    const db: Db = client.db(SETTINGS.TEST_DB);
     blogsCollection = db.collection('blogs');
     postsCollection = db.collection('posts');
     usersCollection = db.collection('users');
