@@ -4,6 +4,8 @@ import {blogsQueryRepository} from "../../repositories/blogsQueryRepository";
 
 export const getAllBlogsHandler = async (req: Request, res: Response) => {
 
+    console.log(1111111111111111)
+
     const data = matchedData(req, { locations: ['query'] });
     const pageNumber = Number(data.pageNumber);
     const pageSize = Number(data.pageSize);
