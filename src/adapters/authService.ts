@@ -6,10 +6,12 @@ import {add} from "date-fns";
 import {User} from "../users/types/user";
 import {isBefore} from "date-fns";
 import {mailService} from "./mailService";
+import {LoginTokensType} from "../auth/types/loginTokensType";
+import {refreshTokenRepository} from "../auth/repositories/refreshTokenRepository";
 
 export const authService = {
 
-    async loginUser (loginOrEmail: string, password: string): Promise<string | null> {
+    async loginUser (loginOrEmail: string, password: string): Promise<LoginTokensType | null> {
         const foundUser = (await usersRepository.findByLoginOrEmail(loginOrEmail))[0];
         if (!foundUser) {
             return null;
@@ -18,7 +20,10 @@ export const authService = {
         if (!passwordCheckResult) {
             return null;
         }
-        return await jwtService.createJWT(foundUser._id.toString());
+        const jwtToken = await jwtService.createJWT(foundUser._id.toString());
+        const refreshToken = await jwtService.createRefreshToken(foundUser._id.toString());
+
+        return {jwtToken: jwtToken, refreshToken: refreshToken};
     },
 
     async registerUser (login: string, password: string, email: string): Promise<string> {
@@ -102,6 +107,26 @@ export const authService = {
         }
         await mailService.sendMail(email, newVerificationCode);
         return updateCodeResult;
+
+    },
+
+    async refreshJWTandRefreshToken(oldRefreshToken: string): Promise<LoginTokensType | null> {
+
+        const userId = await jwtService.verifyRefreshToken(oldRefreshToken);
+        if (!userId) {
+            return null;
+        }
+        const findResult = await refreshTokenRepository.findRefreshToken(oldRefreshToken);
+        if (findResult) {
+            return null;
+        }
+
+        const newJwtToken = await jwtService.createJWT(userId);
+        const newRefreshToken = await jwtService.createRefreshToken(oldRefreshToken);
+
+        await refreshTokenRepository.addTokenToBlackList(oldRefreshToken);
+
+        return {jwtToken: newJwtToken, refreshToken: newRefreshToken};
 
     }
 
