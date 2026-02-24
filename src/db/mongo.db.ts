@@ -5,11 +5,13 @@ import {SETTINGS} from "../core/settings/settings";
 import {User} from "../users/types/user";
 import {CommentType} from "../comments/types/commentType";
 import {UserDBType} from "../auth/types/UserDBType";
+import {RefreshTokenType} from "../auth/types/refreshTokenType";
 
 export let blogsCollection: Collection<Blog>;
 export let postsCollection: Collection<Post>;
 export let usersCollection: Collection<User>;
 export let commentsCollection: Collection<CommentType>;
+export let refreshTokenBlackListCollection: Collection<RefreshTokenType>
 
 export const runDb = async (dbUrl: string): Promise<MongoClient> => {
 
@@ -20,6 +22,7 @@ export const runDb = async (dbUrl: string): Promise<MongoClient> => {
     postsCollection = db.collection('posts');
     usersCollection = db.collection('users');
     commentsCollection = db.collection('comments');
+    refreshTokenBlackListCollection = db.collection('refreshTokenBlackList');
 
     try {
         await client.connect();
