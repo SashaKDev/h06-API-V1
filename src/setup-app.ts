@@ -7,11 +7,13 @@ import {usersRouter} from "./users/router/usersRouter";
 import {authRouter} from "./auth/router/authRouter";
 import {commentsRouter} from "./comments/router/commentsRouter";
 import {mailService} from "./adapters/mailService";
+import cookieParser from "cookie-parser";
 
 
 export const setupApp = () => {
     const app = express();
     app.use(express.json());
+    app.use(cookieParser());
 
     app.get('/', (req: Request, res: Response) => {
         res.json({message: 'Hello World!'});
