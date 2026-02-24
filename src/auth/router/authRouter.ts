@@ -8,11 +8,16 @@ import {registrationConfirmationHandler} from "./handlers/registrationConfirmati
 import {registrationEmailResendingHandler} from "./handlers/registrationEmailResendingHandler";
 import {inputValidationResult} from "../../core/middlewares/validation/inputValidationResult";
 import {emailValidation} from "../validation/emailValidation";
+import {refreshTokenHandler} from "./handlers/refreshTokenHandler";
+import {logoutHandler} from "./handlers/logoutHandler";
 
 export const authRouter = Router();
 
 authRouter.post("/login",
     loginHandler);
+
+authRouter.post("/refresh-token",
+    refreshTokenHandler)
 
 authRouter.post("/registration",
     userInputDtoValidation,
@@ -26,6 +31,9 @@ authRouter.post("/registration-email-resending",
     emailValidation,
     inputValidationResult,
     registrationEmailResendingHandler)
+
+authRouter.post("/log-out",
+    logoutHandler)
 
 authRouter.get("/me",
     bearerAuthMiddleware,
