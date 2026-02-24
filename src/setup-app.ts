@@ -6,7 +6,6 @@ import {postsRouter} from "./posts/router/postsRouter";
 import {usersRouter} from "./users/router/usersRouter";
 import {authRouter} from "./auth/router/authRouter";
 import {commentsRouter} from "./comments/router/commentsRouter";
-import {mailService} from "./adapters/mailService";
 import cookieParser from "cookie-parser";
 
 
