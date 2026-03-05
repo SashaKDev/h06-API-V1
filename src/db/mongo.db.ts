@@ -5,12 +5,14 @@ import {SETTINGS} from "../core/settings/settings";
 import {User} from "../users/types/user";
 import {CommentType} from "../comments/types/commentType";
 import {RefreshTokenType} from "../auth/types/refreshTokenType";
+import {SessionType} from "../auth/types/sessionType";
 
 export let blogsCollection: Collection<Blog>;
 export let postsCollection: Collection<Post>;
 export let usersCollection: Collection<User>;
 export let commentsCollection: Collection<CommentType>;
 export let refreshTokenBlackListCollection: Collection<RefreshTokenType>
+export let sessionsCollection: Collection<SessionType>;
 
 export const runDb = async (dbUrl: string): Promise<MongoClient> => {
 
@@ -22,15 +24,21 @@ export const runDb = async (dbUrl: string): Promise<MongoClient> => {
     usersCollection = db.collection('users');
     commentsCollection = db.collection('comments');
     refreshTokenBlackListCollection = db.collection('refreshTokenBlackList');
+    sessionsCollection = db.collection('sessions');
 
     try {
         await client.connect();
         await db.command({ping: 1});
         console.log("✅ Connected to MongoDB");
+        await refreshTokenBlackListCollection.createIndex(
+            {createdAt: 1},
+            {expireAfterSeconds: 3600},
+        )
         return client;
     } catch (err) {
         await client.close();
         throw new Error("❌ Error connecting to MongoDB");
+        // console.log(err)
     }
 
 
