@@ -13,12 +13,11 @@ export const refreshTokenHandler = async (req: Request, res: Response) => {
         res.sendStatus(401);
         return;
     }
-
     res.cookie("refreshToken", newTokens.refreshToken, { httpOnly: true, secure: true });
     res
         .status(200)
         .json({
-            accessToken: newTokens.refreshToken
+            accessToken: newTokens.jwtToken,
         });
 
 }
