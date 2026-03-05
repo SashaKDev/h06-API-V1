@@ -32,7 +32,7 @@ authRouter.post("/registration-email-resending",
     inputValidationResult,
     registrationEmailResendingHandler)
 
-authRouter.post("/log-out",
+authRouter.post("/logout",
     logoutHandler)
 
 authRouter.get("/me",
