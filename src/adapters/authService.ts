@@ -8,6 +8,9 @@ import {isBefore} from "date-fns";
 import {mailService} from "./mailService";
 import {LoginTokensType} from "../auth/types/loginTokensType";
 import {refreshTokenRepository} from "../auth/repositories/refreshTokenRepository";
+import {SessionType} from "../auth/types/sessionType";
+import {sessionsCollection} from "../db/mongo.db";
+import jwt, {JwtPayload} from "jsonwebtoken";
 
 export const authService = {
 
@@ -20,8 +23,27 @@ export const authService = {
         if (!passwordCheckResult) {
             return null;
         }
-        const jwtToken = await jwtService.createJWT(foundUser._id.toString());
-        const refreshToken = await jwtService.createRefreshToken(foundUser._id.toString());
+
+        const deviceId = randomUUID();
+
+        const jwtToken = await jwtService.createJWT(foundUser._id.toString(), deviceId);
+        const refreshToken = await jwtService.createRefreshToken(foundUser._id.toString(), deviceId);
+
+        const decodedPayload = jwt.decode(refreshToken) as JwtPayload;
+        const iat = decodedPayload.iat as number;
+        console.log("iat");
+        console.log(iat);
+
+        const session: SessionType = {
+
+            userId: foundUser._id.toString(),
+            deviceId: deviceId,
+            iat: iat,
+            createdAt: new Date(),
+
+        }
+
+        await sessionsCollection.insertOne(session);
 
         return {jwtToken: jwtToken, refreshToken: refreshToken};
     },
@@ -112,19 +134,49 @@ export const authService = {
 
     async refreshJWTandRefreshToken(oldRefreshToken: string): Promise<LoginTokensType | null> {
 
-        const userId = await jwtService.verifyRefreshToken(oldRefreshToken);
-        if (!userId) {
-            return null;
-        }
-        const findResult = await refreshTokenRepository.findRefreshToken(oldRefreshToken);
-        if (findResult) {
+        const verifyResult = await jwtService.verifyRefreshToken(oldRefreshToken);
+
+        if (!verifyResult) {
             return null;
         }
 
-        const newJwtToken = await jwtService.createJWT(userId);
-        const newRefreshToken = await jwtService.createRefreshToken(oldRefreshToken);
+        const userId = verifyResult.userId;
+        const deviceId = verifyResult.deviceId;
 
-        await refreshTokenRepository.addTokenToBlackList(oldRefreshToken);
+        const session = await sessionsCollection.findOne({
+            userId: userId,
+            deviceId: deviceId,
+        })
+
+        if (!session) {
+            return null;
+        }
+
+        const oldRtPayload = jwt.decode(oldRefreshToken) as JwtPayload;
+        const oldRtIat = oldRtPayload.iat as number;
+
+        if (oldRtIat !== session.iat) {
+            console.log("bad rt");
+            return null;
+        }
+
+        const newJwtToken = await jwtService.createJWT(userId, deviceId);
+        const newRefreshToken = await jwtService.createRefreshToken(userId, deviceId);
+
+        const newRtPayload = jwt.decode(newRefreshToken) as JwtPayload;
+        const newRtIat = newRtPayload.iat as number;
+
+        await sessionsCollection.updateOne(
+            {
+            userId: userId,
+            deviceId: deviceId,
+            },
+            {$set:
+                    {
+                        iat: newRtIat,
+                    }
+            }
+        );
 
         return {jwtToken: newJwtToken, refreshToken: newRefreshToken};
 
