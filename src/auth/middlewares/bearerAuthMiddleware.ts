@@ -18,6 +18,7 @@ export const bearerAuthMiddleware = async (req: Request, res: Response, next: Ne
     }
 
     const tokenVerifyResult = await jwtService.verifyJWT(authToken);
+    console.log("result "+tokenVerifyResult);
     req.userId = tokenVerifyResult
     if (!tokenVerifyResult) {
         res.sendStatus(401);
