@@ -1,6 +1,4 @@
 import {Request, Response} from "express";
-import {jwtService} from "../../../adapters/jwtService";
-import {refreshTokenRepository} from "../../repositories/refreshTokenRepository";
 import {sessionsCollection} from "../../../db/mongo.db";
 import jwt from "jsonwebtoken";
 

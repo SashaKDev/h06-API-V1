@@ -7,7 +7,6 @@ import {User} from "../users/types/user";
 import {isBefore} from "date-fns";
 import {mailService} from "./mailService";
 import {LoginTokensType} from "../auth/types/loginTokensType";
-import {refreshTokenRepository} from "../auth/repositories/refreshTokenRepository";
 import {SessionType} from "../auth/types/sessionType";
 import {sessionsCollection} from "../db/mongo.db";
 import jwt, {JwtPayload} from "jsonwebtoken";
