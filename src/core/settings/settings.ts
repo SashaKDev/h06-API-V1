@@ -4,9 +4,9 @@ export const SETTINGS = {
     DB: 'incubator-db',
     TEST_DB: 'testDB',
     //local MongoDB URL
-    MONGO_URL: 'mongodb://localhost:27017/testdb',
+    // MONGO_URL: 'mongodb://localhost:27017/testdb',
     //atlas MongoDB URL
-    // MONGO_URL: 'mongodb+srv://root:root@cluster0.5oduiuj.mongodb.net/?appName=Cluster0',
+    MONGO_URL: 'mongodb+srv://root:root@cluster0.5oduiuj.mongodb.net/?appName=Cluster0',
 
     JWT_SECRET: 'f1f5deg4hy5fr5d5g',
     REFRESH_TOKEN_SECRET: 'i1y4deh2hy2rr5d5g',
