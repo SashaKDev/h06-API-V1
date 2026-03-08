@@ -14,7 +14,7 @@ import jwt, {JwtPayload} from "jsonwebtoken";
 
 export const authService = {
 
-    async loginUser (loginOrEmail: string, password: string): Promise<LoginTokensType | null> {
+    async loginUser (loginOrEmail: string, password: string, deviceName: string, ip: string): Promise<LoginTokensType | null> {
         const foundUser = (await usersRepository.findByLoginOrEmail(loginOrEmail))[0];
         if (!foundUser) {
             return null;
@@ -38,7 +38,9 @@ export const authService = {
 
             userId: foundUser._id.toString(),
             deviceId: deviceId,
+            deviceName: deviceName,
             iat: iat,
+            ip: ip,
             createdAt: new Date(),
 
         }
