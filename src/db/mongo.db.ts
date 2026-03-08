@@ -6,6 +6,7 @@ import {User} from "../users/types/user";
 import {CommentType} from "../comments/types/commentType";
 import {RefreshTokenType} from "../auth/types/refreshTokenType";
 import {SessionType} from "../auth/types/sessionType";
+import {RateLimitType} from "../auth/types/rateLimitType";
 
 export let blogsCollection: Collection<Blog>;
 export let postsCollection: Collection<Post>;
@@ -13,6 +14,7 @@ export let usersCollection: Collection<User>;
 export let commentsCollection: Collection<CommentType>;
 export let refreshTokenBlackListCollection: Collection<RefreshTokenType>
 export let sessionsCollection: Collection<SessionType>;
+export let rateLimitCollection: Collection<RateLimitType>
 
 export const runDb = async (dbUrl: string): Promise<MongoClient> => {
 
@@ -25,6 +27,7 @@ export const runDb = async (dbUrl: string): Promise<MongoClient> => {
     commentsCollection = db.collection('comments');
     refreshTokenBlackListCollection = db.collection('refreshTokenBlackList');
     sessionsCollection = db.collection('sessions');
+    rateLimitCollection = db.collection('rateLimits');
 
     try {
         await client.connect();
