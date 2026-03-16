@@ -1,5 +1,5 @@
-import {usersQueryRepository} from "../../../users/repository/usersQueryRepository";
 import {Request, Response} from "express";
+import {usersQueryRepository} from "../../../users/router/composition-root";
 
 export const getUserInfoHandler = async (req: Request, res: Response) => {
     const userAuthInfo = await usersQueryRepository.findUserAuthInfo(req.userId!);
