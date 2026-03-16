@@ -1,4 +1,3 @@
-import {usersRepository} from "../users/repository/usersRepository";
 import bcrypt from "bcrypt";
 import {jwtService} from "./jwtService";
 import {randomUUID} from "crypto";
@@ -10,6 +9,7 @@ import {LoginTokensType} from "../auth/types/loginTokensType";
 import {SessionType} from "../auth/types/sessionType";
 import {sessionsCollection} from "../db/mongo.db";
 import jwt, {JwtPayload} from "jsonwebtoken";
+import {usersRepository} from "../users/router/composition-root";
 
 export const authService = {
 
