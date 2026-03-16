@@ -2,7 +2,7 @@ import {postsRepository} from "../../posts/repositories/postsRepository";
 import {commentsRepository} from "../repositories/commentsRepository";
 import {CommentType} from "../types/commentType";
 import {WithId} from "mongodb";
-import {usersRepository} from "../../users/repository/usersRepository";
+import {usersRepository} from "../../users/router/composition-root";
 
 export const commentsService = {
     async createCommentForPost(postId: string, comment: string, userId: string): Promise<string | null> {
