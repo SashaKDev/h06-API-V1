@@ -12,6 +12,9 @@ import {refreshTokenHandler} from "./handlers/refreshTokenHandler";
 import {logoutHandler} from "./handlers/logoutHandler";
 import {refreshTokenVerifyMiddleware} from "../middlewares/refreshTokenVerifyMiddleware";
 import {rateLimitMiddleware} from "../middlewares/rateLimitMiddleware";
+import {passwordRecoveryHandler} from "./handlers/passwordRecoveryHandler";
+import {newPasswordHandler} from "./handlers/newPasswordHandler";
+import {passwordValidation} from "../validation/passwordValidation";
 
 export const authRouter = Router();
 
@@ -20,7 +23,7 @@ authRouter.post("/login",
     loginHandler);
 
 authRouter.post("/refresh-token",
-    // refreshTokenVerifyMiddleware,
+    refreshTokenVerifyMiddleware,
     refreshTokenHandler)
 
 authRouter.post("/registration",
@@ -38,6 +41,19 @@ authRouter.post("/registration-email-resending",
     emailValidation,
     inputValidationResult,
     registrationEmailResendingHandler)
+
+authRouter.post("/password-recovery",
+    rateLimitMiddleware,
+    emailValidation,
+    inputValidationResult,
+    passwordRecoveryHandler)
+
+authRouter.post("/new-password",
+    rateLimitMiddleware,
+    passwordValidation,
+    inputValidationResult,
+    newPasswordHandler
+    )
 
 authRouter.post("/logout",
     refreshTokenVerifyMiddleware,
