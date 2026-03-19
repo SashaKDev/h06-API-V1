@@ -5,7 +5,10 @@ export type User = {
     createdAt: string,
     emailConfirmation: {
         confirmationCode: string,
-        expirationDate: Date;
+        expirationDate: Date,
         isConfirmed: boolean,
+    }
+    recoveryCode: {
+        iat: number,
     }
 }
