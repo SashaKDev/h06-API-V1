@@ -1,6 +1,8 @@
 import {User} from "../types/user";
 import {usersCollection} from "../../db/mongo.db";
 import {ObjectId, WithId} from "mongodb";
+import {add} from "date-fns";
+import {id} from "date-fns/locale";
 
 export class UsersRepository {
     async findById(id: string): Promise<WithId<User> | null> {
@@ -60,6 +62,33 @@ export class UsersRepository {
             }
         );
         return updateResult.matchedCount;
+    }
+
+    async updatePassword(userId: string, newPassword: string): Promise<number> {
+        const updateResult = await usersCollection.updateOne(
+            {_id: new ObjectId(userId)},
+            {
+                $set:
+                    {
+                        password: newPassword,
+
+                    }
+            }
+        );
+        return updateResult.matchedCount;
+    }
+
+    async updateRecoveryCodeIat (userId: string, iat: number): Promise<void> {
+        await usersCollection.updateOne(
+            {_id: new ObjectId(userId)},
+            {
+                $set:
+                    {
+                        "recoveryCode.iat": iat,
+
+                    }
+            }
+        );
     }
 
     async deleteById(id: string): Promise<number> {
