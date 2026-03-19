@@ -3,8 +3,13 @@ import {SETTINGS} from "../core/settings/settings";
 
 export const jwtService = {
 
-    async createJWT (id: string, deviceId: string): Promise<string> {
+    async createJWT (id: string): Promise<string> {
         const token = jwt.sign({userId: id}, SETTINGS.JWT_SECRET, {expiresIn: '10s'});
+        return token;
+    },
+
+    async createRecoveryCode (id: string): Promise<string> {
+        const token = jwt.sign({userId: id}, SETTINGS.JWT_SECRET, {expiresIn: '1h'});
         return token;
     },
 
