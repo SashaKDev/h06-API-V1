@@ -36,6 +36,9 @@ export class UsersService {
                 confirmationCode: "",
                 expirationDate: new Date(),
                 isConfirmed: false,
+            },
+            recoveryCode: {
+                iat: 0
             }
         }
         return await this.usersRepository.create(newUser)
