@@ -25,7 +25,7 @@ export const authService = {
 
         const deviceId = randomUUID();
 
-        const jwtToken = await jwtService.createJWT(foundUser._id.toString(), deviceId);
+        const jwtToken = await jwtService.createJWT(foundUser._id.toString());
         const refreshToken = await jwtService.createRefreshToken(foundUser._id.toString(), deviceId);
 
         const decodedPayload = jwt.decode(refreshToken) as JwtPayload;
@@ -76,12 +76,50 @@ export const authService = {
                     minutes: 25,
                 }),
                 isConfirmed: false,
+            },
+            recoveryCode: {
+                iat: 0
             }
         }
 
         const insertResult = await usersRepository.create(newUser);
 
         return confirmationCode;
+
+    },
+
+    async recoverPassword (email: string): Promise<void | null> {
+        const foundUser = await usersRepository.findByLoginOrEmail(email);
+        if (foundUser.length === 0) {
+            return null
+        }
+        const recoveryCode = await jwtService.createRecoveryCode(foundUser[0]._id.toString());
+        const recoveryCodeIat = jwt.decode(recoveryCode) as {userId: string, iat: number};
+        await mailService.sendPasswordRecoveryMail(email, recoveryCode)
+        await usersRepository.updateRecoveryCodeIat(recoveryCodeIat.userId, recoveryCodeIat.iat)
+
+    },
+
+    async updatePassword (recoveryCode: string, newPassword: string): Promise<void | null> {
+        const userId = await jwtService.verifyJWT(recoveryCode)
+        if (!userId) {
+            return null
+        }
+        const iat = (jwt.decode(recoveryCode) as {iat: number}).iat;
+        const foundUser = await usersRepository.findById(userId);
+        if (!foundUser) {
+            return null;
+        }
+
+        if (foundUser.recoveryCode.iat !== iat) {
+            return null
+        }
+
+        const hashNewPassword = await bcrypt.hash(newPassword, 10);
+        console.log(hashNewPassword);
+
+        await usersRepository.updatePassword(userId, hashNewPassword);
+        await usersRepository.updateRecoveryCodeIat(userId, 0)
 
     },
 
@@ -161,7 +199,7 @@ export const authService = {
             return null;
         }
 
-        const newJwtToken = await jwtService.createJWT(userId, deviceId);
+        const newJwtToken = await jwtService.createJWT(userId);
         const newRefreshToken = await jwtService.createRefreshToken(userId, deviceId);
 
         const newRtPayload = jwt.decode(newRefreshToken) as JwtPayload;
