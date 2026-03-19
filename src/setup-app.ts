@@ -26,6 +26,7 @@ export const setupApp = () => {
     app.set('trust proxy', true)
 
     app.get('/', (req: Request, res: Response) => {
+        console.log(1)
         res.json({message: 'Hello World!'});
     })
     app.use(BLOGS_PATH, blogsRouter);
@@ -38,3 +39,4 @@ export const setupApp = () => {
 
     return app;
 }
+
