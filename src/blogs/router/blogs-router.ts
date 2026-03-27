@@ -1,53 +1,50 @@
 import {Router} from "express";
-import {blogsInputDtoValidation} from "../validation/blogsInputDtoValidation";
-import {inputValidationResult} from "../../core/middlewares/validation/inputValidationResult";
-import {basicAuthMiddleware} from "../../auth/middlewares/basicAuthMiddleware";
-import {idValidation} from "../../core/middlewares/validation/paramValidation";
-import {deleteBlogHandler} from "./handlers/deleteBlogHandler";
-import {updateBlogHandler} from "./handlers/updateBlogHandler";
-import {createBlogHandler} from "./handlers/createBlogHandler";
-import {getBlogHandler} from "./handlers/getBlogHandler";
-import {getAllBlogsHandler} from "./handlers/getAllBlogsHandler";
+import {blogsInputDtoValidation} from "../validation/blogsInputDtoValidation.js";
+import {inputValidationResult} from "../../core/middlewares/validation/inputValidationResult.js";
+import {basicAuthMiddleware} from "../../auth/middlewares/basicAuthMiddleware.js";
+import {idValidation} from "../../core/middlewares/validation/paramValidation.js";
 import {
     paginationAndSortingInputValidation
-} from "../../core/middlewares/validation/paginatoinAndSortingInputValidation";
-import {getBlogPostsHandler} from "./handlers/getBlogPostsHandler";
-import {createPostForBlogHandler} from "./handlers/createPostForBlogHandler";
-import {postInputDtoValidation} from "../../posts/validation/postInputDtoValidation";
+} from "../../core/middlewares/validation/paginatoinAndSortingInputValidation.js";
+import {postInputDtoValidation} from "../../posts/validation/postInputDtoValidation.js";
+import {BlogsController} from "./handlers/blogsController.js";
+import {container} from "../../composition-root.js";
+
+const blogsController = container.get(BlogsController);
 
 export const blogsRouter = Router({});
 
 blogsRouter.get('/',
     paginationAndSortingInputValidation,
     inputValidationResult,
-    getAllBlogsHandler
+    blogsController.getAllBlogs.bind(blogsController)
 );
 
 blogsRouter.get('/:id',
     idValidation,
     inputValidationResult,
-    getBlogHandler
+    blogsController.getBlog.bind(blogsController)
 );
 
 blogsRouter.get('/:id/posts',
     idValidation,
     paginationAndSortingInputValidation,
     inputValidationResult,
-    getBlogPostsHandler
+    blogsController.getBlogPosts.bind(blogsController)
 );
 
 blogsRouter.post('/',
     basicAuthMiddleware,
     blogsInputDtoValidation,
     inputValidationResult,
-    createBlogHandler
+    blogsController.createBlog.bind(blogsController)
 );
 blogsRouter.post('/:id/posts',
     basicAuthMiddleware,
     idValidation,
     postInputDtoValidation,
     inputValidationResult,
-    createPostForBlogHandler
+    blogsController.createPostForBlog.bind(blogsController)
 );
 
 
@@ -56,12 +53,12 @@ blogsRouter.put('/:id',
     idValidation,
     blogsInputDtoValidation,
     inputValidationResult,
-    updateBlogHandler
+    blogsController.updateBlog.bind(blogsController)
 );
 
 blogsRouter.delete('/:id',
     basicAuthMiddleware,
     idValidation,
     inputValidationResult,
-    deleteBlogHandler
+    blogsController.deleteBlog.bind(blogsController)
 );
