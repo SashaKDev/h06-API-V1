@@ -1,12 +1,14 @@
-import {commentsCollection} from "../../db/mongo.db";
+import {commentsCollection} from "../../db/mongo.db.js";
 import {ObjectId} from "mongodb";
-import {CommentsViewModel} from "../types/commentsViewModel";
-import {mapCommentToViewModel} from "../mappers/mapCommentToViewModel";
-import {CommentsPaginationData} from "../types/commentsPaginationData";
-import {CommentsViewModelWithPaginator} from "../types/commentsViewModelWithPaginator";
-import {mapToCommentsViewModelWithPaginator} from "../mappers/mapToCommentsViewModelWithPaginator";
+import {CommentsViewModel} from "../types/commentsViewModel.js";
+import {mapCommentToViewModel} from "../mappers/mapCommentToViewModel.js";
+import {CommentsPaginationData} from "../types/commentsPaginationData.js";
+import {CommentsViewModelWithPaginator} from "../types/commentsViewModelWithPaginator.js";
+import {mapToCommentsViewModelWithPaginator} from "../mappers/mapToCommentsViewModelWithPaginator.js";
+import {injectable} from "inversify";
 
-export const commentsQueryRepository = {
+@injectable()
+export class CommentsQueryRepository {
 
     async findById(commentId: string): Promise<CommentsViewModel | null> {
         const foundComment = await commentsCollection.findOne({_id: new ObjectId(commentId)});
@@ -14,7 +16,7 @@ export const commentsQueryRepository = {
             return null;
         }
         return mapCommentToViewModel(foundComment);
-    },
+    }
 
     async findCommentsForPost(postId: string, data: CommentsPaginationData): Promise<CommentsViewModelWithPaginator | null> {
 
