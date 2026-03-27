@@ -1,6 +1,6 @@
-import {Post} from "../types/post";
+import {Post} from "../types/post.js";
 import {WithId} from "mongodb";
-import {PostViewModel} from "../types/postViewModel";
+import {PostViewModel} from "../types/postViewModel.js";
 
 
 export const mapPostToViewModel = (post: WithId<Post>): PostViewModel => {

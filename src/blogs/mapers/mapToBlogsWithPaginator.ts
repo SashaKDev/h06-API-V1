@@ -1,5 +1,5 @@
-import {BlogViewModel} from "../types/blogsViewModel";
-import {BlogsViewModelWithPaginator} from "../types/BlogsViewModelWithPaginator";
+import {BlogViewModel} from "../types/blogsViewModel.js";
+import {BlogsViewModelWithPaginator} from "../types/BlogsViewModelWithPaginator.js";
 
 
 export const mapBlogsViewModelToBlogsWithPaginator = (blogs: BlogViewModel[], totalCount: number, pageNumber: number, pageSize: number): BlogsViewModelWithPaginator => {
