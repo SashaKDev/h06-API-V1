@@ -1,64 +1,67 @@
 import {Router} from "express";
-import {loginHandler} from "./handlers/loginHandler";
-import {getUserInfoHandler} from "./handlers/getUserInfoHandler";
-import {bearerAuthMiddleware} from "../middlewares/bearerAuthMiddleware";
-import {registrationHandler} from "./handlers/registrationHandler";
-import {userInputDtoValidation} from "../../users/validation/userInputDtoValidation";
-import {registrationConfirmationHandler} from "./handlers/registrationConfirmationHandler";
-import {registrationEmailResendingHandler} from "./handlers/registrationEmailResendingHandler";
-import {inputValidationResult} from "../../core/middlewares/validation/inputValidationResult";
-import {emailValidation} from "../validation/emailValidation";
-import {refreshTokenHandler} from "./handlers/refreshTokenHandler";
-import {logoutHandler} from "./handlers/logoutHandler";
-import {refreshTokenVerifyMiddleware} from "../middlewares/refreshTokenVerifyMiddleware";
-import {rateLimitMiddleware} from "../middlewares/rateLimitMiddleware";
-import {passwordRecoveryHandler} from "./handlers/passwordRecoveryHandler";
-import {newPasswordHandler} from "./handlers/newPasswordHandler";
-import {passwordValidation} from "../validation/passwordValidation";
+import {bearerAuthMiddleware} from "../middlewares/bearerAuthMiddleware.js";
+import {userInputDtoValidation} from "../../users/validation/userInputDtoValidation.js";
+import {inputValidationResult} from "../../core/middlewares/validation/inputValidationResult.js";
+import {emailValidation} from "../validation/emailValidation.js";
+import {refreshTokenVerifyMiddleware} from "../middlewares/refreshTokenVerifyMiddleware.js";
+import {rateLimitMiddleware} from "../middlewares/rateLimitMiddleware.js";
+import {passwordValidation} from "../validation/passwordValidation.js";
+import {container} from "../../composition-root.js";
+import { AuthController } from "./handlers/authController.js";
+
+const authController = container.get(AuthController);
 
 export const authRouter = Router();
 
 authRouter.post("/login",
     rateLimitMiddleware,
-    loginHandler);
+    authController.loginHandler.bind(authController)
+);
 
 authRouter.post("/refresh-token",
     refreshTokenVerifyMiddleware,
-    refreshTokenHandler)
+    authController.refreshTokenHandler.bind(authController)
+)
 
 authRouter.post("/registration",
     rateLimitMiddleware,
     userInputDtoValidation,
     inputValidationResult,
-    registrationHandler)
+    authController.registrationHandler.bind(authController)
+)
 
 authRouter.post("/registration-confirmation",
     rateLimitMiddleware,
-    registrationConfirmationHandler)
+    authController.registrationConfirmationHandler.bind(authController)
+)
 
 authRouter.post("/registration-email-resending",
     rateLimitMiddleware,
     emailValidation,
     inputValidationResult,
-    registrationEmailResendingHandler)
+    authController.registrationEmailResendingHandler.bind(authController)
+)
 
 authRouter.post("/password-recovery",
     rateLimitMiddleware,
     emailValidation,
     inputValidationResult,
-    passwordRecoveryHandler)
+    authController.passwordRecoveryHandler.bind(authController)
+)
 
 authRouter.post("/new-password",
     rateLimitMiddleware,
     passwordValidation,
     inputValidationResult,
-    newPasswordHandler
-    )
+    authController.newPasswordHandler.bind(authController)
+)
 
 authRouter.post("/logout",
     refreshTokenVerifyMiddleware,
-    logoutHandler)
+    authController.logoutHandler.bind(authController)
+)
 
 authRouter.get("/me",
     bearerAuthMiddleware,
-    getUserInfoHandler);
+    authController.getUserInfoHandler.bind(authController)
+);
