@@ -1,20 +1,26 @@
 import bcrypt from "bcrypt";
-import {jwtService} from "./jwtService";
+import {jwtService} from "./jwtService.js";
 import {randomUUID} from "crypto";
 import {add} from "date-fns";
-import {User} from "../users/types/user";
-import {isBefore} from "date-fns";
-import {mailService} from "./mailService";
-import {LoginTokensType} from "../auth/types/loginTokensType";
-import {SessionType} from "../auth/types/sessionType";
-import {sessionsCollection} from "../db/mongo.db";
-import jwt, {JwtPayload} from "jsonwebtoken";
-import {usersRepository} from "../users/router/composition-root";
 
-export const authService = {
+import {isBefore} from "date-fns";
+import {MailService} from "./mailService.js";
+import {LoginTokensType} from "../auth/types/loginTokensType.js";
+import {SessionType} from "../auth/types/sessionType.js";
+import {sessionsCollection} from "../db/mongo.db.js";
+import jwt, {JwtPayload} from "jsonwebtoken";
+import {UsersRepository} from "../users/repository/usersRepository.js";
+import {inject, injectable} from "inversify";
+import {User} from "../users/types/user.js";
+
+@injectable()
+export class AuthService {
+
+    constructor(@inject(MailService) protected mailService: MailService,
+                @inject(UsersRepository) protected usersRepository: UsersRepository,) {}
 
     async loginUser (loginOrEmail: string, password: string, deviceName: string, ip: string): Promise<LoginTokensType | null> {
-        const foundUser = (await usersRepository.findByLoginOrEmail(loginOrEmail))[0];
+        const foundUser = (await this.usersRepository.findByLoginOrEmail(loginOrEmail))[0];
         if (!foundUser) {
             return null;
         }
@@ -47,18 +53,18 @@ export const authService = {
         await sessionsCollection.insertOne(session);
 
         return {jwtToken: jwtToken, refreshToken: refreshToken};
-    },
+    }
 
-    async registerUser (login: string, password: string, email: string): Promise<string> {
+    async registerUser (login: string, password: string, email: string): Promise<void> {
         const hashPassword = await bcrypt.hash(password, 10);
 
-        const userByLogin = await usersRepository.findByLoginOrEmail(login);
+        const userByLogin = await this.usersRepository.findByLoginOrEmail(login);
         if (userByLogin.length !== 0) {
             console.log(userByLogin);
             throw new Error("login already exists");
         }
 
-        const userByEmail = await usersRepository.findByLoginOrEmail(email);
+        const userByEmail = await this.usersRepository.findByLoginOrEmail(email);
         if (userByEmail.length !== 0) {
             console.log(userByEmail);
             throw new Error("email already exists");
@@ -82,23 +88,23 @@ export const authService = {
             }
         }
 
-        const insertResult = await usersRepository.create(newUser);
+        const insertResult = await this.usersRepository.create(newUser);
 
-        return confirmationCode;
+        await this.mailService.sendMail(email, confirmationCode);
 
-    },
+    }
 
     async recoverPassword (email: string): Promise<void | null> {
-        const foundUser = await usersRepository.findByLoginOrEmail(email);
+        const foundUser = await this.usersRepository.findByLoginOrEmail(email);
         if (foundUser.length === 0) {
             return null
         }
         const recoveryCode = await jwtService.createRecoveryCode(foundUser[0]._id.toString());
         const recoveryCodeIat = jwt.decode(recoveryCode) as {userId: string, iat: number};
-        await mailService.sendPasswordRecoveryMail(email, recoveryCode)
-        await usersRepository.updateRecoveryCodeIat(recoveryCodeIat.userId, recoveryCodeIat.iat)
+        await this.mailService.sendPasswordRecoveryMail(email, recoveryCode)
+        await this.usersRepository.updateRecoveryCodeIat(recoveryCodeIat.userId, recoveryCodeIat.iat)
 
-    },
+    }
 
     async updatePassword (recoveryCode: string, newPassword: string): Promise<void | null> {
         const userId = await jwtService.verifyJWT(recoveryCode)
@@ -106,7 +112,7 @@ export const authService = {
             return null
         }
         const iat = (jwt.decode(recoveryCode) as {iat: number}).iat;
-        const foundUser = await usersRepository.findById(userId);
+        const foundUser = await this.usersRepository.findById(userId);
         if (!foundUser) {
             return null;
         }
@@ -118,15 +124,15 @@ export const authService = {
         const hashNewPassword = await bcrypt.hash(newPassword, 10);
         console.log(hashNewPassword);
 
-        await usersRepository.updatePassword(userId, hashNewPassword);
-        await usersRepository.updateRecoveryCodeIat(userId, 0)
+        await this.usersRepository.updatePassword(userId, hashNewPassword);
+        await this.usersRepository.updateRecoveryCodeIat(userId, 0)
 
-    },
+    }
 
     async validateConfirmationCode (confirmationCode: string): Promise<number | null> {
         console.log(confirmationCode);
 
-        const foundUser = await usersRepository.findByConfirmationCode(confirmationCode);
+        const foundUser = await this.usersRepository.findByConfirmationCode(confirmationCode);
         console.log(foundUser);
         if (!foundUser) {
             return null;
@@ -140,18 +146,18 @@ export const authService = {
             return null;
         }
 
-        const updateResult = await usersRepository.updateConfirmationStatus(foundUser.email)
+        const updateResult = await this.usersRepository.updateConfirmationStatus(foundUser.email)
         if (!updateResult) {
             return null;
         }
 
         return updateResult;
 
-    },
+    }
 
     async resendConfirmationCode (email: string): Promise<number | null> {
 
-        const foundUser = (await usersRepository.findByLoginOrEmail(email))[0];
+        const foundUser = (await this.usersRepository.findByLoginOrEmail(email))[0];
 
         if (!foundUser) {
             throw new Error("email does not exist");
@@ -162,14 +168,14 @@ export const authService = {
         }
 
         const newVerificationCode = randomUUID();
-        const updateCodeResult = await usersRepository.updateConfirmationCode(foundUser.email, newVerificationCode);
+        const updateCodeResult = await this.usersRepository.updateConfirmationCode(foundUser.email, newVerificationCode);
         if (!updateCodeResult) {
             return null;
         }
-        await mailService.sendMail(email, newVerificationCode);
+        await this.mailService.sendMail(email, newVerificationCode);
         return updateCodeResult;
 
-    },
+    }
 
     async refreshJWTandRefreshToken(oldRefreshToken: string): Promise<LoginTokensType | null> {
 

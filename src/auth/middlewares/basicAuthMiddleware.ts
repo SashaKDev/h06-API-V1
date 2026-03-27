@@ -1,5 +1,5 @@
 import {Request, Response, NextFunction} from 'express';
-import {SETTINGS} from "../../core/settings/settings";
+import {SETTINGS} from "../../core/settings/settings.js";
 
 export const basicAuthMiddleware = (req: Request, res: Response, next: NextFunction) => {
 
