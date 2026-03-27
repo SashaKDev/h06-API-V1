@@ -1,5 +1,5 @@
-import {SessionType} from "../../auth/types/sessionType";
-import {DeviceViewModel} from "../types/deviceViewModel";
+import {SessionType} from "../../auth/types/sessionType.js";
+import {DeviceViewModel} from "../types/deviceViewModel.js";
 import {WithId} from "mongodb";
 
 export const mapDeviceToViewModel = (session: WithId<SessionType>): DeviceViewModel => {

@@ -1,6 +1,6 @@
 import {WithId} from "mongodb";
-import {CommentType} from "../types/commentType";
-import {CommentsViewModel} from "../types/commentsViewModel";
+import {CommentType} from "../types/commentType.js";
+import {CommentsViewModel} from "../types/commentsViewModel.js";
 
 export const mapCommentToViewModel = (comment: WithId<CommentType>): CommentsViewModel => {
     return {
