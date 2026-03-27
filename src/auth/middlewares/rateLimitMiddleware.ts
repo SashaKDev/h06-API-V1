@@ -1,5 +1,5 @@
 import {Request, Response, NextFunction} from "express";
-import {rateLimitCollection} from "../../db/mongo.db";
+import {rateLimitCollection} from "../../db/mongo.db.js";
 
 
 export const rateLimitMiddleware = async (req: Request, res: Response, next: NextFunction) => {

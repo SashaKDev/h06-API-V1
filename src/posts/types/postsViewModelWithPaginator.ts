@@ -1,4 +1,4 @@
-import {PostViewModel} from "./postViewModel";
+import {PostViewModel} from "./postViewModel.js";
 
 export type PostsViewModelWithPaginator = {
     pagesCount: number,
