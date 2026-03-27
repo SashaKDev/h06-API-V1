@@ -1,13 +1,13 @@
-import {Request, Response} from 'express';
-import {postsService} from "../../application/postsService";
-
-export const deletePostHandler = async (req: Request, res: Response) => {
-
-    const deleteResult: number = await postsService.delete(req.params.id);
-    if (deleteResult === 0) {
-        res.sendStatus(404);
-        return;
-    }
-    res.sendStatus(204);
-
-}
+// import {Request, Response} from 'express';
+// import {postsService} from "../../application/postsService.js";
+//
+// export const deletePostHandler = async (req: Request, res: Response) => {
+//
+//     const deleteResult: number = await postsService.delete(req.params.id);
+//     if (deleteResult === 0) {
+//         res.sendStatus(404);
+//         return;
+//     }
+//     res.sendStatus(204);
+//
+// }
