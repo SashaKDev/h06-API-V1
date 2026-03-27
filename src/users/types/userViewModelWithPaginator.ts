@@ -1,4 +1,4 @@
-import {UserViewModel} from "./userViewModel";
+import {UserViewModel} from "./userViewModel.js";
 
 export type UserViewModelWithPaginator = {
     pagesCount: number,
