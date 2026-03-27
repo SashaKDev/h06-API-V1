@@ -1,6 +1,6 @@
-import {refreshTokenBlackListCollection} from "../../db/mongo.db";
+import {refreshTokenBlackListCollection} from "../../db/mongo.db.js";
 import {WithId} from "mongodb";
-import {RefreshTokenType} from "../types/refreshTokenType";
+import {RefreshTokenType} from "../types/refreshTokenType.js";
 
 export const refreshTokenRepository = {
 
