@@ -1,13 +1,17 @@
 import {Router} from "express";
-import {basicAuthMiddleware} from "../../auth/middlewares/basicAuthMiddleware";
-import {userInputDtoValidation} from "../validation/userInputDtoValidation";
-import {idValidation} from "../../core/middlewares/validation/paramValidation";
-import {inputValidationResult} from "../../core/middlewares/validation/inputValidationResult";
+import {basicAuthMiddleware} from "../../auth/middlewares/basicAuthMiddleware.js";
+import {userInputDtoValidation} from "../validation/userInputDtoValidation.js";
+import {idValidation} from "../../core/middlewares/validation/paramValidation.js";
+import {inputValidationResult} from "../../core/middlewares/validation/inputValidationResult.js";
 
 import {
     paginationAndSortingInputValidation
-} from "../../core/middlewares/validation/paginatoinAndSortingInputValidation";
-import {usersController} from "./composition-root";
+} from "../../core/middlewares/validation/paginatoinAndSortingInputValidation.js";
+import {container} from "../../composition-root.js";
+import {UsersController} from "./handlers/usersController.js";
+
+
+const usersController = container.get(UsersController)
 
 export const usersRouter = Router({});
 

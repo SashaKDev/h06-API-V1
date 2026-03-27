@@ -1,9 +1,9 @@
-import {User} from "../types/user";
-import {usersCollection} from "../../db/mongo.db";
+import {User} from "../types/user.js";
+import {usersCollection} from "../../db/mongo.db.js";
 import {ObjectId, WithId} from "mongodb";
-import {add} from "date-fns";
-import {id} from "date-fns/locale";
+import {injectable} from "inversify";
 
+@injectable()
 export class UsersRepository {
     async findById(id: string): Promise<WithId<User> | null> {
         console.log(id)
