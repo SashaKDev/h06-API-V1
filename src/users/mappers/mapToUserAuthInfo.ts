@@ -1,6 +1,6 @@
 import {WithId} from "mongodb";
-import {User} from "../types/user";
-import {UserAuthInfo} from "../types/userAuthInfo";
+import {User} from "../types/user.js";
+import {UserAuthInfo} from "../types/userAuthInfo.js";
 
 export const mapToUserAuthInfo = (user: WithId<User>): UserAuthInfo => {
     return {

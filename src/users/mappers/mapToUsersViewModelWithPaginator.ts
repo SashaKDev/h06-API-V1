@@ -1,5 +1,5 @@
-import {UserViewModel} from "../types/userViewModel";
-import {UserViewModelWithPaginator} from "../types/userViewModelWithPaginator";
+import {UserViewModel} from "../types/userViewModel.js";
+import {UserViewModelWithPaginator} from "../types/userViewModelWithPaginator.js";
 
 export const mapToUsersViewModelWithPaginator = (foundUsersViewModel: UserViewModel[], totalCount: number,
                                                  pageSize: number, pageNumber:number): UserViewModelWithPaginator => {
