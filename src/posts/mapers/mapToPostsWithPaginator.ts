@@ -1,5 +1,5 @@
-import {PostsViewModelWithPaginator} from "../types/postsViewModelWithPaginator";
-import {PostViewModel} from "../types/postViewModel";
+import {PostsViewModelWithPaginator} from "../types/postsViewModelWithPaginator.js";
+import {PostViewModel} from "../types/postViewModel.js";
 
 export const mapToPostsWithPaginator = (posts: PostViewModel[], totalCount: number, pageSize: number, pageNumber: number): PostsViewModelWithPaginator => {
     return {
