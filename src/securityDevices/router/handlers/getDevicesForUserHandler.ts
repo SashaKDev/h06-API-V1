@@ -1,7 +1,7 @@
 import {Request, Response} from "express";
 import jwt, {JwtPayload} from "jsonwebtoken";
-import {sessionsCollection} from "../../../db/mongo.db";
-import {mapDeviceToViewModel} from "../../mappers/mapDeviceToViewModel";
+import {sessionsCollection} from "../../../db/mongo.db.js";
+import {mapDeviceToViewModel} from "../../mappers/mapDeviceToViewModel.js";
 
 export const getDevicesForUserHandler = async (req: Request, res: Response) => {
 
