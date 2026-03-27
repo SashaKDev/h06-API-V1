@@ -1,5 +1,6 @@
 import nodemailer from "nodemailer";
-import {SETTINGS} from "../core/settings/settings";
+import {SETTINGS} from "../core/settings/settings.js";
+import {injectable} from "inversify";
 
 const transport = nodemailer.createTransport({
     service: 'gmail',
@@ -9,8 +10,9 @@ const transport = nodemailer.createTransport({
     }
 })
 
-export const mailService = {
-    async sendMail (email: string, confirmationCode: string): Promise<void> {
+@injectable()
+export class MailService {
+    async sendMail(email: string, confirmationCode: string): Promise<void> {
 
 
         const info = await transport.sendMail({
@@ -22,12 +24,10 @@ export const mailService = {
                 <a href='https://somesite.com/confirm-email?code=${confirmationCode}'>complete registration</a>
                 </p>`
         })
-        // console.timeEnd("send")
-        // console.log("Mail info:", info);
 
-    },
+    }
 
-    async sendPasswordRecoveryMail (email: string, recoveryCode: string): Promise<void> {
+    async sendPasswordRecoveryMail(email: string, recoveryCode: string): Promise<void> {
         const info = await transport.sendMail({
             from: "sasha.val252000@gmail.com",
             to: email,
@@ -36,8 +36,6 @@ export const mailService = {
                 <a href='https://somesite.com/password-recovery?recoveryCode=${recoveryCode}'>recovery password</a>
                 </p>`
         })
-        // console.timeEnd("send")
-        // console.log("Mail info:", info);
 
     }
 }
