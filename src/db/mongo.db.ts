@@ -1,12 +1,12 @@
 import {Collection, Db, MongoClient} from 'mongodb';
-import {Blog} from "../blogs/types/blog";
-import {Post} from "../posts/types/post";
-import {SETTINGS} from "../core/settings/settings";
-import {User} from "../users/types/user";
-import {CommentType} from "../comments/types/commentType";
-import {RefreshTokenType} from "../auth/types/refreshTokenType";
-import {SessionType} from "../auth/types/sessionType";
-import {RateLimitType} from "../auth/types/rateLimitType";
+import {Blog} from "../blogs/types/blog.js";
+import {Post} from "../posts/types/post.js";
+import {SETTINGS} from "../core/settings/settings.js";
+import {User} from "../users/types/user.js";
+import {CommentType} from "../comments/types/commentType.js";
+import {RefreshTokenType} from "../auth/types/refreshTokenType.js";
+import {SessionType} from "../auth/types/sessionType.js";
+import {RateLimitType} from "../auth/types/rateLimitType.js";
 
 export let blogsCollection: Collection<Blog>;
 export let postsCollection: Collection<Post>;
