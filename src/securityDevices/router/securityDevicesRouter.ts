@@ -1,8 +1,8 @@
 import {Router} from "express";
-import {getDevicesForUserHandler} from "./handlers/getDevicesForUserHandler";
-import {refreshTokenVerifyMiddleware} from "../../auth/middlewares/refreshTokenVerifyMiddleware";
-import {deleteAllOtherSessionsHandler} from "./handlers/deleteAllOtherSessionsHandler";
-import {deleteSessionByDeviceIdHandler} from "./handlers/deleteSessionByDeviceIdHandler";
+import {getDevicesForUserHandler} from "./handlers/getDevicesForUserHandler.js";
+import {refreshTokenVerifyMiddleware} from "../../auth/middlewares/refreshTokenVerifyMiddleware.js";
+import {deleteAllOtherSessionsHandler} from "./handlers/deleteAllOtherSessionsHandler.js";
+import {deleteSessionByDeviceIdHandler} from "./handlers/deleteSessionByDeviceIdHandler.js";
 
 export const securityDevicesRouter = Router();
 
