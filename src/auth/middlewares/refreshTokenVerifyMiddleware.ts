@@ -1,7 +1,7 @@
 import {Request, Response, NextFunction} from "express";
-import {jwtService} from "../../adapters/jwtService";
+import {jwtService} from "../../adapters/jwtService.js";
 import jwt, {JwtPayload} from "jsonwebtoken";
-import {sessionsCollection} from "../../db/mongo.db";
+import {sessionsCollection} from "../../db/mongo.db.js";
 
 export const refreshTokenVerifyMiddleware = async (req: Request, res: Response, next: NextFunction) => {
 
