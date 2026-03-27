@@ -1,6 +1,6 @@
 import {Request, Response} from "express";
 import jwt from "jsonwebtoken";
-import {sessionsCollection} from "../../../db/mongo.db";
+import {sessionsCollection} from "../../../db/mongo.db.js";
 
 export const deleteAllOtherSessionsHandler = async (req: Request, res: Response) => {
 
