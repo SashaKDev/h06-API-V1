@@ -1,6 +1,6 @@
-import {setupApp} from "./setup-app";
-import {runDb} from "./db/mongo.db";
-import {SETTINGS} from "./core/settings/settings";
+import {setupApp} from "./setup-app.js";
+import {runDb} from "./db/mongo.db.js";
+import {SETTINGS} from "./core/settings/settings.js";
 import dotenv from 'dotenv';
 dotenv.config();
 
