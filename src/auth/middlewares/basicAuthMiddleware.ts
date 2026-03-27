@@ -3,6 +3,8 @@ import {SETTINGS} from "../../core/settings/settings.js";
 
 export const basicAuthMiddleware = (req: Request, res: Response, next: NextFunction) => {
 
+    console.log(111)
+
     const auth = req.headers['authorization'] as string;
 
     if (!auth) {
