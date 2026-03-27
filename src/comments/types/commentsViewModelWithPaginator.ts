@@ -1,4 +1,4 @@
-import {CommentsViewModel} from "./commentsViewModel";
+import {CommentsViewModel} from "./commentsViewModel.js";
 
 export type CommentsViewModelWithPaginator = {
     pagesCount: number,
