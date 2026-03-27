@@ -1,16 +1,16 @@
-import {UsersQueryRepository} from "../../repository/usersQueryRepository";
-import {UsersService} from "../../application/usersService";
+import {UsersQueryRepository} from "../../repository/usersQueryRepository.js";
+import {UsersService} from "../../application/usersService.js";
 import {Request, Response} from "express";
 import bcrypt from "bcrypt";
-import {UserInputDto} from "../../types/userInputDto";
+import {UserInputDto} from "../../types/userInputDto.js";
 import {matchedData} from "express-validator";
-import {UsersPaginationData} from "../../types/usersPaginationData";
-import {usersService} from "../composition-root";
+import {UsersPaginationData} from "../../types/usersPaginationData.js";
+import {inject} from "inversify";
 
 export class UsersController {
 
-    constructor(protected usersService: UsersService,
-                protected usersQueryRepository: UsersQueryRepository
+    constructor(@inject(UsersService) protected usersService: UsersService,
+                @inject(UsersQueryRepository) protected usersQueryRepository: UsersQueryRepository
     ) {
     }
 

@@ -1,13 +1,15 @@
-import {UserViewModel} from "../types/userViewModel";
-import {usersCollection} from "../../db/mongo.db";
+import {UserViewModel} from "../types/userViewModel.js";
+import {usersCollection} from "../../db/mongo.db.js";
 import {ObjectId} from "mongodb";
-import {mapUserToViewModel} from "../mappers/mapUserToViewModel";
-import {UsersPaginationData} from "../types/usersPaginationData";
-import {UserViewModelWithPaginator} from "../types/userViewModelWithPaginator";
-import {mapToUsersViewModelWithPaginator} from "../mappers/mapToUsersViewModelWithPaginator";
-import {UserAuthInfo} from "../types/userAuthInfo";
-import {mapToUserAuthInfo} from "../mappers/mapToUserAuthInfo";
+import {mapUserToViewModel} from "../mappers/mapUserToViewModel.js";
+import {UsersPaginationData} from "../types/usersPaginationData.js";
+import {UserViewModelWithPaginator} from "../types/userViewModelWithPaginator.js";
+import {mapToUsersViewModelWithPaginator} from "../mappers/mapToUsersViewModelWithPaginator.js";
+import {UserAuthInfo} from "../types/userAuthInfo.js";
+import {mapToUserAuthInfo} from "../mappers/mapToUserAuthInfo.js";
+import {injectable} from "inversify";
 
+@injectable()
 export class UsersQueryRepository {
 
     async findById(id: string): Promise<UserViewModel | null> {
