@@ -1,4 +1,4 @@
-import {BlogViewModel} from "./blogsViewModel";
+import {BlogViewModel} from "./blogsViewModel.js";
 
 export type BlogsViewModelWithPaginator = {
     pagesCount: number,
