@@ -1,12 +1,13 @@
-import {blogsCollection} from "../../db/mongo.db";
-import {mapBlogsViewModelToBlogsWithPaginator} from "../mapers/mapToBlogsWithPaginator";
-import {BlogsViewModelWithPaginator} from "../types/BlogsViewModelWithPaginator";
+import {blogsCollection} from "../../db/mongo.db.js";
+import {mapBlogsViewModelToBlogsWithPaginator} from "../mapers/mapToBlogsWithPaginator.js";
+import {BlogsViewModelWithPaginator} from "../types/BlogsViewModelWithPaginator.js";
 import {ObjectId} from "mongodb";
-import {BlogViewModel} from "../types/blogsViewModel";
-import {mapBlogToViewModel} from "../mapers/mapBlogToViewModel";
+import {BlogViewModel} from "../types/blogsViewModel.js";
+import {mapBlogToViewModel} from "../mapers/mapBlogToViewModel.js";
+import {injectable} from "inversify";
 
-
-export const blogsQueryRepository = {
+@injectable()
+export class BlogsQueryRepository {
     async findAll(pageNumber: number, pageSize: number, sortBy: string, sortDirection: string, searchNameTerm: string): Promise<BlogsViewModelWithPaginator>{
 
         const skip = (pageNumber - 1) * pageSize;
@@ -38,7 +39,7 @@ export const blogsQueryRepository = {
         })
         //     BlogViewModel[] => BlogViewModelWithPaginator
         return mapBlogsViewModelToBlogsWithPaginator(blogsViewModel, totalCount, pageNumber, pageSize);
-    },
+    }
 
     async findById(id: string): Promise<BlogViewModel | null>{
         const foundBlog =  await blogsCollection.findOne({_id: new ObjectId(id)});
@@ -46,5 +47,5 @@ export const blogsQueryRepository = {
             return null;
         }
         return mapBlogToViewModel(foundBlog);
-    },
+    }
 }
