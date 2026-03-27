@@ -1,35 +1,33 @@
 import {Router} from "express";
-import {basicAuthMiddleware} from "../../auth/middlewares/basicAuthMiddleware";
-import {postInputDtoValidation} from "../validation/postInputDtoValidation";
-import {inputValidationResult} from "../../core/middlewares/validation/inputValidationResult";
-import {idValidation} from "../../core/middlewares/validation/paramValidation";
-import {getAllPostsHandler} from "./handlers/getAllPostsHandler";
-import {getPostHandler} from "./handlers/getPostHandler";
-import {createPostHandler} from "./handlers/createPostHandler";
-import {updatePostHandler} from "./handlers/updatePostHandler";
-import {deletePostHandler} from "./handlers/deletePostHandler";
+import {basicAuthMiddleware} from "../../auth/middlewares/basicAuthMiddleware.js";
+import {postInputDtoValidation} from "../validation/postInputDtoValidation.js";
+import {inputValidationResult} from "../../core/middlewares/validation/inputValidationResult.js";
+import {idValidation} from "../../core/middlewares/validation/paramValidation.js";
 import {
     paginationAndSortingInputValidation
-} from "../../core/middlewares/validation/paginatoinAndSortingInputValidation";
-import {commentInputDtoValidation} from "../../comments/validation/commentsValidation";
-import {createCommentForPostHandler} from "./handlers/createCommentForPostHandler";
-import {getCommentsForPostHandler} from "./handlers/getCommentsForPostHandler";
-import {bearerAuthMiddleware} from "../../auth/middlewares/bearerAuthMiddleware";
+} from "../../core/middlewares/validation/paginatoinAndSortingInputValidation.js";
+import {commentInputDtoValidation} from "../../comments/validation/commentsValidation.js";
+import {bearerAuthMiddleware} from "../../auth/middlewares/bearerAuthMiddleware.js";
+import {PostsController} from "./handlers/postsController.js";
+import {container} from "../../composition-root.js";
+
+const postsController = container.get(PostsController);
 
 export const postsRouter = Router({});
 
 postsRouter.get('/',
     paginationAndSortingInputValidation,
     inputValidationResult,
-    getAllPostsHandler);
+    postsController.getAllPosts.bind(postsController)
+);
 
-postsRouter.get('/:id', getPostHandler);
+postsRouter.get('/:id', postsController.getPost.bind(postsController));
 
 postsRouter.post('/',
     basicAuthMiddleware,
     postInputDtoValidation,
     inputValidationResult,
-    createPostHandler
+    postsController.createPost.bind(postsController)
 );
 
 postsRouter.put('/:id',
@@ -37,14 +35,14 @@ postsRouter.put('/:id',
     idValidation,
     postInputDtoValidation,
     inputValidationResult,
-    updatePostHandler
+    postsController.updatePost.bind(postsController)
 );
 
 postsRouter.delete('/:id',
     basicAuthMiddleware,
     idValidation,
     inputValidationResult,
-    deletePostHandler
+    postsController.deletePost.bind(postsController)
 );
 
 postsRouter.post('/:id/comments',
@@ -52,7 +50,7 @@ postsRouter.post('/:id/comments',
     idValidation,
     commentInputDtoValidation,
     inputValidationResult,
-    createCommentForPostHandler
+    postsController.createCommentForPost.bind(postsController)
 )
 
 postsRouter.get('/:id/comments',
@@ -60,5 +58,5 @@ postsRouter.get('/:id/comments',
     paginationAndSortingInputValidation,
     // commentInputDtoValidation,
     inputValidationResult,
-    getCommentsForPostHandler
+    postsController.getCommentsForPost.bind(postsController)
 )

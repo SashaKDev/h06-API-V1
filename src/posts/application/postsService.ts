@@ -1,17 +1,22 @@
-import {Post} from "../types/post";
-import {postsRepository} from "../repositories/postsRepository";
-import {PostInputDto} from "../dto/post-input.dto";
-import {blogsService} from "../../blogs/application/blogsService";
+import {Post} from "../types/post.js";
+import {PostsRepository} from "../repositories/postsRepository.js";
+import {PostInputDto} from "../dto/post-input.dto.js";
+import {BlogsService} from "../../blogs/application/blogsService.js";
 import {WithId} from "mongodb";
+import {inject, injectable} from "inversify";
 
-export const postsService = {
+@injectable()
+export class PostsService {
+
+    constructor(@inject(PostsRepository) protected postsRepository: PostsRepository,
+                @inject(BlogsService) protected blogsService: BlogsService) {}
 
     async findById(id: string): Promise<WithId<Post> | null> {
-        return await postsRepository.findById(id)
-    },
+        return await this.postsRepository.findById(id)
+    }
 
     async create(post: PostInputDto): Promise<string | null> {
-        const foundBlog = await blogsService.findById(post.blogId);
+        const foundBlog = await this.blogsService.findById(post.blogId);
         if (!foundBlog) {
             return null;
         }
@@ -25,12 +30,12 @@ export const postsService = {
             blogName: foundBlog.name
         }
 
-        return await postsRepository.create(newPost);
+        return await this.postsRepository.create(newPost);
 
-    },
+    }
 
     async createForBlog(post: PostInputDto): Promise<string | null> {
-        const foundBlog = await blogsService.findById(post.blogId);
+        const foundBlog = await this.blogsService.findById(post.blogId);
         if (!foundBlog) {
             return null;
         }
@@ -42,15 +47,15 @@ export const postsService = {
             blogName: foundBlog.name,
             createdAt: new Date().toISOString(),
         }
-        return await postsRepository.create(newPost);
-    },
+        return await this.postsRepository.create(newPost);
+    }
 
     async update(id: string, dto: PostInputDto): Promise<number> {
-        return await postsRepository.update(id, dto);
-    },
+        return await this.postsRepository.update(id, dto);
+    }
 
     async delete(id: string): Promise<number> {
-        return await postsRepository.delete(id);
+        return await this.postsRepository.delete(id);
     }
 
 }
