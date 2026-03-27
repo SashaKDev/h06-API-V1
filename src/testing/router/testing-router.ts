@@ -1,5 +1,5 @@
 import {Router, Request, Response} from "express";
-import {blogsCollection, postsCollection, usersCollection} from "../../db/mongo.db";
+import {blogsCollection, postsCollection, usersCollection} from "../../db/mongo.db.js";
 
 export const testingRouter = Router({});
 

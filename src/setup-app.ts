@@ -7,15 +7,15 @@ import {
     SECURITY_DEVICES_PATH,
     TESTING_PATH,
     USERS_PATH
-} from "./core/paths/paths";
-import {blogsRouter} from "./blogs/router/blogs-router";
-import {testingRouter} from "./testing/router/testing-router";
-import {postsRouter} from "./posts/router/postsRouter";
-import {usersRouter} from "./users/router/usersRouter";
-import {authRouter} from "./auth/router/authRouter";
-import {commentsRouter} from "./comments/router/commentsRouter";
+} from "./core/paths/paths.js";
+import {blogsRouter} from "./blogs/router/blogs-router.js";
+import {testingRouter} from "./testing/router/testing-router.js";
+import {postsRouter} from "./posts/router/postsRouter.js";
+import {usersRouter} from "./users/router/usersRouter.js";
+import {authRouter} from "./auth/router/authRouter.js";
+import {commentsRouter} from "./comments/router/commentsRouter.js";
 import cookieParser from "cookie-parser";
-import {securityDevicesRouter} from "./securityDevices/router/securityDevicesRouter";
+import {securityDevicesRouter} from "./securityDevices/router/securityDevicesRouter.js";
 
 
 export const setupApp = () => {
