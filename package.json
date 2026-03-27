@@ -5,6 +5,7 @@
   "repository": "git@github.com:SashaKDev/h02-API-V1.git",
   "author": "Alexander <sasha.kozel252000@gmail.com>",
   "license": "MIT",
+  "type": "module",
   "scripts": {
     "watch": "tsc -w",
     "dev": "nodemon --inspect dist/index.js",
@@ -17,13 +18,16 @@
     "cookie-parser": "^1.4.7",
     "express": "^5.1.0",
     "express-validator": "^7.3.0",
+    "inversify": "^8.1.0",
     "jsonwebtoken": "^9.0.3",
-    "mongodb": "^7.0.0"
+    "mongodb": "^7.0.0",
+    "reflect-metadata": "^0.2.2"
   },
   "devDependencies": {
     "@types/bcrypt": "^6.0.0",
     "@types/cookie-parser": "^1.4.10",
     "@types/express": "^5.0.5",
+    "@types/inversify": "^2.0.33",
     "@types/jest": "29.5.5",
     "@types/node": "^24.10.1",
     "@types/nodemailer": "^7.0.9",
