@@ -11,8 +11,11 @@ export class UsersService {
     constructor(@inject(UsersRepository) protected usersRepository: UsersRepository) {
     }
 
-    async findMeById(id: string): Promise<MeViewModel> {
-        const foundUser = await this.usersRepository.findById(id) as WithId<User>;
+    async findMeById(id: string): Promise<MeViewModel | null> {
+        const foundUser = await this.usersRepository.findById(id);
+        if (!foundUser) {
+            return null;
+        }
         return {
             email: foundUser.email,
             login: foundUser.login,
@@ -35,12 +38,16 @@ export class UsersService {
             email: newUserDto.email,
             createdAt: new Date().toISOString(),
             emailConfirmation: {
-                confirmationCode: "",
+                confirmationCode: " ",
                 expirationDate: new Date(),
                 isConfirmed: false,
             },
             recoveryCode: {
                 iat: 0
+            },
+            likesInfo: {
+                likes: [" "],
+                dislikes: [" "]
             }
         }
         return await this.usersRepository.create(newUser)
