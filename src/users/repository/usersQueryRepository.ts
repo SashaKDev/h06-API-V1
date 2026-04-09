@@ -1,6 +1,6 @@
 import {UserViewModel} from "../types/userViewModel.js";
 import {usersCollection} from "../../db/mongo.db.js";
-import {ObjectId} from "mongodb";
+import {ObjectId, WithId} from "mongodb";
 import {mapUserToViewModel} from "../mappers/mapUserToViewModel.js";
 import {UsersPaginationData} from "../types/usersPaginationData.js";
 import {UserViewModelWithPaginator} from "../types/userViewModelWithPaginator.js";
@@ -8,12 +8,14 @@ import {mapToUsersViewModelWithPaginator} from "../mappers/mapToUsersViewModelWi
 import {UserAuthInfo} from "../types/userAuthInfo.js";
 import {mapToUserAuthInfo} from "../mappers/mapToUserAuthInfo.js";
 import {injectable} from "inversify";
+import {UserModel} from "../model/userModel.js";
+import {User} from "../types/user.js";
 
 @injectable()
 export class UsersQueryRepository {
 
     async findById(id: string): Promise<UserViewModel | null> {
-        const foundUser = await usersCollection.findOne({_id: new ObjectId(id)});
+        const foundUser = await UserModel.findById(id);
         if (!foundUser) {
             return null;
         }
@@ -21,7 +23,7 @@ export class UsersQueryRepository {
     }
 
     async findUserAuthInfo(id: string): Promise<UserAuthInfo | null> {
-        const foundUser = await usersCollection.findOne({_id: new ObjectId(id)});
+        const foundUser = await UserModel.findById(id);
         if (!foundUser) {
             return null;
         }
@@ -52,16 +54,22 @@ export class UsersQueryRepository {
             }
         }
 
-        const foundUsers = await usersCollection
+        const foundUsers = await UserModel
             .find(filter)
             .sort({[sortBy]: sortDirectionNumber})
             .skip(skip)
             .limit(limit)
-            .toArray();
 
         const totalCount = await usersCollection.countDocuments(filter);
         console.log(totalCount);
-        const foundUsersViewModel = foundUsers.map(mapUserToViewModel);
+        const foundUsersViewModel = foundUsers.map(user => {
+            return {
+                id: user._id.toString(),
+                login: user.login,
+                email: user.email,
+                createdAt: user.createdAt,
+            }
+        });
         return mapToUsersViewModelWithPaginator(foundUsersViewModel, totalCount, data.pageSize, data.pageNumber);
     }
 
