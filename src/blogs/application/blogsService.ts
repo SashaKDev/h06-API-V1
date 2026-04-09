@@ -9,7 +9,7 @@ export class BlogsService {
 
     constructor(@inject(BlogsRepository) protected blogsRepository: BlogsRepository) {}
 
-    async findById(id: string): Promise<WithId<Blog> | null> {
+    async findById(id: string): Promise<Blog | null> {
         return await this.blogsRepository.findById(id);
     }
 
@@ -24,11 +24,11 @@ export class BlogsService {
         return await this.blogsRepository.create(newBlog);
     }
 
-    async update(id: string, blog: BlogInputDto): Promise<number> {
+    async update(id: string, blog: BlogInputDto): Promise<boolean> {
         return await this.blogsRepository.update(id, blog);
     }
 
-    async delete(id: string): Promise<number> {
+    async delete(id: string): Promise<boolean> {
         return await this.blogsRepository.delete(id);
     }
 }
