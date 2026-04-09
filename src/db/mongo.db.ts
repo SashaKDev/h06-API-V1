@@ -7,6 +7,7 @@ import {CommentType} from "../comments/types/commentType.js";
 import {RefreshTokenType} from "../auth/types/refreshTokenType.js";
 import {SessionType} from "../auth/types/sessionType.js";
 import {RateLimitType} from "../auth/types/rateLimitType.js";
+import mongoose from "mongoose";
 
 export let blogsCollection: Collection<Blog>;
 export let postsCollection: Collection<Post>;
@@ -32,17 +33,21 @@ export const runDb = async (dbUrl: string): Promise<MongoClient> => {
     try {
         await client.connect();
         await db.command({ping: 1});
-        console.log("✅ Connected to MongoDB");
+        console.log("✅ MongoDB driver connected");
         await refreshTokenBlackListCollection.createIndex(
             {createdAt: 1},
             {expireAfterSeconds: 3600},
         )
+
+        await mongoose.connect(dbUrl);
+        console.log("✅ Mongoose connected")
+
         return client;
     } catch (err) {
         await client.close();
+        mongoose.disconnect();
         throw new Error("❌ Error connecting to MongoDB");
         // console.log(err)
     }
-
 
 }

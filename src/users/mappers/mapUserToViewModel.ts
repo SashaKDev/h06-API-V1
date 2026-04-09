@@ -1,8 +1,7 @@
-import {User} from "../types/user.js";
 import {UserViewModel} from "../types/userViewModel.js";
-import {WithId} from "mongodb";
+import {UserDocument} from "../types/userDocument.js";
 
-export const mapUserToViewModel = (user: WithId<User>): UserViewModel => {
+export const mapUserToViewModel = (user: UserDocument): UserViewModel => {
     return {
         id: user._id.toString(),
         login: user.login,
