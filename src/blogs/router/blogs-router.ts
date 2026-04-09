@@ -34,7 +34,7 @@ blogsRouter.get('/:id/posts',
 );
 
 blogsRouter.post('/',
-    basicAuthMiddleware,
+    // basicAuthMiddleware,
     blogsInputDtoValidation,
     inputValidationResult,
     blogsController.createBlog.bind(blogsController)
@@ -49,7 +49,7 @@ blogsRouter.post('/:id/posts',
 
 
 blogsRouter.put('/:id',
-    basicAuthMiddleware,
+    // basicAuthMiddleware,
     idValidation,
     blogsInputDtoValidation,
     inputValidationResult,
@@ -57,7 +57,7 @@ blogsRouter.put('/:id',
 );
 
 blogsRouter.delete('/:id',
-    basicAuthMiddleware,
+    // basicAuthMiddleware,
     idValidation,
     inputValidationResult,
     blogsController.deleteBlog.bind(blogsController)
