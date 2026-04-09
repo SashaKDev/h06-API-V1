@@ -6,4 +6,9 @@ export type CommentsViewModel = {
         userId: string,
         userLogin: string
     },
+    "likesInfo": {
+        "likesCount": number,
+        "dislikesCount": number,
+        "myStatus": string
+    }
 }
