@@ -1,6 +1,5 @@
 import {BlogsRepository} from "../repositories/blogsRepository.js";
 import {Blog} from "../types/blog.js";
-import {WithId} from "mongodb";
 import {BlogInputDto} from "../dto/blog-input.dto.js";
 import {inject, injectable} from "inversify";
 

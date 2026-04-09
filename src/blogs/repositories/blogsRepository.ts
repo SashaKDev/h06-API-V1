@@ -1,7 +1,5 @@
 import {Blog} from "../types/blog.js";
 import {BlogInputDto} from "../dto/blog-input.dto.js";
-import {ObjectId, WithId} from "mongodb";
-import {blogsCollection} from "../../db/mongo.db.js";
 import {injectable} from "inversify";
 import {BlogModel} from "../model/blogModel.js";
 
