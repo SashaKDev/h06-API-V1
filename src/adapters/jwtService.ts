@@ -4,7 +4,7 @@ import {SETTINGS} from "../core/settings/settings.js";
 export class jwtService {
 
     static async createJWT (id: string): Promise<string> {
-        const token = jwt.sign({userId: id}, SETTINGS.JWT_SECRET, {expiresIn: '10s'});
+        const token = jwt.sign({userId: id}, SETTINGS.JWT_SECRET, {expiresIn: '1h'});
         return token;
     }
 
@@ -14,7 +14,7 @@ export class jwtService {
     }
 
     static async createRefreshToken (userId: string, deviceId: string): Promise<string> {
-        const refreshToken = jwt.sign({userId: userId, deviceId: deviceId}, SETTINGS.REFRESH_TOKEN_SECRET, {expiresIn: '20s'});
+        const refreshToken = jwt.sign({userId: userId, deviceId: deviceId}, SETTINGS.REFRESH_TOKEN_SECRET, {expiresIn: '10h'});
         return refreshToken;
     }
 
