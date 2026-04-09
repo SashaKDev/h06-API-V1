@@ -10,5 +10,9 @@ export type User = {
     }
     recoveryCode: {
         iat: number,
+    },
+    likesInfo: {
+        likes: string[],
+        dislikes: string[],
     }
 }
