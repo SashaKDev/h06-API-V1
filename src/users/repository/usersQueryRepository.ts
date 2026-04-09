@@ -1,6 +1,5 @@
 import {UserViewModel} from "../types/userViewModel.js";
 import {usersCollection} from "../../db/mongo.db.js";
-import {ObjectId, WithId} from "mongodb";
 import {mapUserToViewModel} from "../mappers/mapUserToViewModel.js";
 import {UsersPaginationData} from "../types/usersPaginationData.js";
 import {UserViewModelWithPaginator} from "../types/userViewModelWithPaginator.js";
@@ -9,7 +8,6 @@ import {UserAuthInfo} from "../types/userAuthInfo.js";
 import {mapToUserAuthInfo} from "../mappers/mapToUserAuthInfo.js";
 import {injectable} from "inversify";
 import {UserModel} from "../model/userModel.js";
-import {User} from "../types/user.js";
 
 @injectable()
 export class UsersQueryRepository {

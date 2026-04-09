@@ -7,7 +7,6 @@ import {PostsQueryRepository} from "../../repositories/postsQueryRepository.js";
 import {inject} from "inversify";
 import {matchedData} from "express-validator";
 import {CommentsPaginationData} from "../../../comments/types/commentsPaginationData.js";
-import {UsersService} from "../../../users/application/usersService.js";
 import {UsersRepository} from "../../../users/repository/usersRepository.js";
 
 export class PostsController {
