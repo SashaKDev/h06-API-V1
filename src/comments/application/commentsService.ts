@@ -1,11 +1,9 @@
 import {PostsRepository} from "../../posts/repositories/postsRepository.js";
 import {CommentsRepository} from "../repositories/commentsRepository.js";
 import {CommentType} from "../types/commentType.js";
-import {WithId} from "mongodb";
 import {UsersRepository} from "../../users/repository/usersRepository.js";
 import {inject, injectable} from "inversify";
 import {CommentDocument} from "../types/commentDocument.js";
-import {commentsRouter} from "../router/commentsRouter.js";
 
 @injectable()
 export class CommentsService {

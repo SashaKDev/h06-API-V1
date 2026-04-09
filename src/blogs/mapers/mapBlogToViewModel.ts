@@ -1,5 +1,3 @@
-import {Blog} from "../types/blog.js";
-import {WithId} from "mongodb";
 import {BlogViewModel} from "../types/blogsViewModel.js";
 import {BlogDocument} from "../types/blogDocument.js";
 
