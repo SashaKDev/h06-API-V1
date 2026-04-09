@@ -1,14 +1,10 @@
 import {blogsCollection} from "../../db/mongo.db.js";
 import {mapBlogsViewModelToBlogsWithPaginator} from "../mapers/mapToBlogsWithPaginator.js";
 import {BlogsViewModelWithPaginator} from "../types/BlogsViewModelWithPaginator.js";
-import {ObjectId, WithId} from "mongodb";
 import {BlogViewModel} from "../types/blogsViewModel.js";
 import {mapBlogToViewModel} from "../mapers/mapBlogToViewModel.js";
 import {injectable} from "inversify";
 import {BlogModel} from "../model/blogModel.js";
-import {Blog} from "../types/blog.js";
-import {BlogDocument} from "../types/blogDocument.js";
-import {isBooleanObject} from "node:util/types";
 
 @injectable()
 export class BlogsQueryRepository {
