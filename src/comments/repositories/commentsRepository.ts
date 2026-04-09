@@ -1,6 +1,5 @@
-import {commentsCollection} from "../../db/mongo.db.js";
 import {CommentType} from "../types/commentType.js";
-import {ObjectId, WithId} from "mongodb";
+import {ObjectId} from "mongodb";
 import {injectable} from "inversify";
 import {CommentModel} from "../model/commentModel.js";
 import {CommentDocument} from "../types/commentDocument.js";

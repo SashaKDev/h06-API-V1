@@ -1,5 +1,3 @@
-import {commentsCollection} from "../../db/mongo.db.js";
-import {ObjectId} from "mongodb";
 import {CommentsViewModel} from "../types/commentsViewModel.js";
 import {mapCommentToViewModel} from "../mappers/mapCommentToViewModel.js";
 import {CommentsPaginationData} from "../types/commentsPaginationData.js";
