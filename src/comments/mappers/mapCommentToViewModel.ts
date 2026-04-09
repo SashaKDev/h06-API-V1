@@ -1,8 +1,9 @@
 import {WithId} from "mongodb";
 import {CommentType} from "../types/commentType.js";
 import {CommentsViewModel} from "../types/commentsViewModel.js";
+import {CommentDocument} from "../types/commentDocument.js";
 
-export const mapCommentToViewModel = (comment: WithId<CommentType>): CommentsViewModel => {
+export const mapCommentToViewModel = (comment: CommentDocument): CommentsViewModel => {
     return {
         id: comment._id.toString(),
         content: comment.content,
@@ -11,5 +12,11 @@ export const mapCommentToViewModel = (comment: WithId<CommentType>): CommentsVie
             userLogin: comment.userLogin,
         },
         createdAt: comment.createdAt,
+        likesInfo: {
+            likesCount: comment.likesInfo.likes,
+            dislikesCount: comment.likesInfo.dislikes,
+            myStatus: "None"
+        }
+
     }
 }
