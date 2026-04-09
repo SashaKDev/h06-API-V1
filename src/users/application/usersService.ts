@@ -2,7 +2,6 @@ import {UserInputDto} from "../types/userInputDto.js";
 import {UsersRepository} from "../repository/usersRepository.js";
 import {User} from "../types/user.js";
 import {MeViewModel} from "../../auth/types/meViewModel.js";
-import {WithId} from "mongodb";
 import {inject, injectable} from "inversify";
 
 @injectable()

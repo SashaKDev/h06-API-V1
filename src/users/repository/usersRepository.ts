@@ -1,6 +1,5 @@
 import {User} from "../types/user.js";
 import {usersCollection} from "../../db/mongo.db.js";
-import {ObjectId, WithId} from "mongodb";
 import {injectable} from "inversify";
 import {UserModel} from "../model/userModel.js";
 import {UserDocument} from "../types/userDocument.js";
