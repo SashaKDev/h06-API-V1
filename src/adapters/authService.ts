@@ -85,6 +85,10 @@ export class AuthService {
             },
             recoveryCode: {
                 iat: 0
+            },
+            likesInfo: {
+                likes: [" "],
+                dislikes: [" "]
             }
         }
 
