@@ -1,5 +1,3 @@
-import {WithId} from "mongodb";
-import {CommentType} from "../types/commentType.js";
 import {CommentsViewModel} from "../types/commentsViewModel.js";
 import {CommentDocument} from "../types/commentDocument.js";
 

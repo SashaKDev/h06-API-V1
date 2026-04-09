@@ -1,5 +1,3 @@
-import {WithId} from "mongodb";
-import {User} from "../types/user.js";
 import {UserAuthInfo} from "../types/userAuthInfo.js";
 import {UserDocument} from "../types/userDocument.js";
 
