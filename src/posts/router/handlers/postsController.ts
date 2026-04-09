@@ -7,13 +7,16 @@ import {PostsQueryRepository} from "../../repositories/postsQueryRepository.js";
 import {inject} from "inversify";
 import {matchedData} from "express-validator";
 import {CommentsPaginationData} from "../../../comments/types/commentsPaginationData.js";
+import {UsersService} from "../../../users/application/usersService.js";
+import {UsersRepository} from "../../../users/repository/usersRepository.js";
 
 export class PostsController {
 
     constructor(@inject(CommentsService) protected commentsService: CommentsService,
                 @inject(CommentsQueryRepository) protected commentsQueryRepository: CommentsQueryRepository,
                 @inject(PostsService) protected postsService: PostsService,
-                @inject(PostsQueryRepository) protected postsQueryRepository: PostsQueryRepository) {
+                @inject(PostsQueryRepository) protected postsQueryRepository: PostsQueryRepository,
+                @inject(UsersRepository) protected usersRepository: UsersRepository) {
     }
 
     async createCommentForPost(req: Request, res: Response) {
@@ -78,8 +81,8 @@ export class PostsController {
             .json(foundPostsWithPaginator);
     }
 
-    async getCommentsForPost(req: Request, res: Response) {
-
+    async getCommentsForPost (req: Request, res: Response) {
+        const userId = req.userId;
         const data = matchedData(req, {locations: ['query']});
 
         const commentsPaginationData: CommentsPaginationData = {
@@ -94,6 +97,27 @@ export class PostsController {
             return;
         }
         const foundComments = await this.commentsQueryRepository.findCommentsForPost(req.params.id, commentsPaginationData);
+        if (!userId) {
+            res
+                .status(200)
+                .json(foundComments);
+            return
+        }
+        const foundUser = await this.usersRepository.findById(userId);
+        if (!foundUser) {
+            res.sendStatus(404);
+            return;
+        }
+
+        foundComments.items.forEach(comment => {
+            if (foundUser.likesInfo.likes.includes(comment.id)) {
+                comment.likesInfo.myStatus = "Like"
+            }
+            if (foundUser.likesInfo.dislikes.includes(comment.id)) {
+                comment.likesInfo.myStatus = "Dislike"
+            }
+        })
+
         res
             .status(200)
             .json(foundComments);

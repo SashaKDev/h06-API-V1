@@ -9,7 +9,7 @@ export class PostsRepository {
 
     async findById(id: string): Promise<WithId<Post> | null> {
         const foundPost = await postsCollection.findOne({_id: new ObjectId(id)});
-        // console.log(foundPost);
+        console.log(id);
         return foundPost;
     }
 
