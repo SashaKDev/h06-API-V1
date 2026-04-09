@@ -10,6 +10,7 @@ import {commentInputDtoValidation} from "../../comments/validation/commentsValid
 import {bearerAuthMiddleware} from "../../auth/middlewares/bearerAuthMiddleware.js";
 import {PostsController} from "./handlers/postsController.js";
 import {container} from "../../composition-root.js";
+import {lightBearerAuthMiddleware} from "../../auth/middlewares/lightBearerAuthMiddleware.js";
 
 const postsController = container.get(PostsController);
 
@@ -24,7 +25,7 @@ postsRouter.get('/',
 postsRouter.get('/:id', postsController.getPost.bind(postsController));
 
 postsRouter.post('/',
-    basicAuthMiddleware,
+    // basicAuthMiddleware,
     postInputDtoValidation,
     inputValidationResult,
     postsController.createPost.bind(postsController)
@@ -54,9 +55,9 @@ postsRouter.post('/:id/comments',
 )
 
 postsRouter.get('/:id/comments',
+    lightBearerAuthMiddleware,
     idValidation,
     paginationAndSortingInputValidation,
-    // commentInputDtoValidation,
     inputValidationResult,
     postsController.getCommentsForPost.bind(postsController)
 )
