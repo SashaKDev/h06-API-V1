@@ -1,10 +1,14 @@
 import {blogsCollection} from "../../db/mongo.db.js";
 import {mapBlogsViewModelToBlogsWithPaginator} from "../mapers/mapToBlogsWithPaginator.js";
 import {BlogsViewModelWithPaginator} from "../types/BlogsViewModelWithPaginator.js";
-import {ObjectId} from "mongodb";
+import {ObjectId, WithId} from "mongodb";
 import {BlogViewModel} from "../types/blogsViewModel.js";
 import {mapBlogToViewModel} from "../mapers/mapBlogToViewModel.js";
 import {injectable} from "inversify";
+import {BlogModel} from "../model/blogModel.js";
+import {Blog} from "../types/blog.js";
+import {BlogDocument} from "../types/blogDocument.js";
+import {isBooleanObject} from "node:util/types";
 
 @injectable()
 export class BlogsQueryRepository {
@@ -19,12 +23,12 @@ export class BlogsQueryRepository {
             filter = { name: { $regex: searchNameTerm, $options: "i" } }
         }
 
-        const blogs = await blogsCollection
+        const blogs = await BlogModel
                 .find(filter)
                 .sort({ [sortBy]:  sortDirectionNumber})
                 .skip(skip)
                 .limit(limit)
-                .toArray();
+
         const totalCount = await blogsCollection.countDocuments(filter)
         //     WithId<Blog>[] => BlogViewModel[]
         const blogsViewModel = blogs.map(blogs => {
@@ -42,10 +46,12 @@ export class BlogsQueryRepository {
     }
 
     async findById(id: string): Promise<BlogViewModel | null>{
-        const foundBlog =  await blogsCollection.findOne({_id: new ObjectId(id)});
+        const foundBlog =  await BlogModel.findById(id);
+        console.log(foundBlog);
         if (!foundBlog) {
             return null;
         }
         return mapBlogToViewModel(foundBlog);
+        // return foundBlog;
     }
 }
