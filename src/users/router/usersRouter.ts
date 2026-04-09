@@ -16,21 +16,21 @@ const usersController = container.get(UsersController)
 export const usersRouter = Router({});
 
 usersRouter.get('/',
-    basicAuthMiddleware,
+    // basicAuthMiddleware,
     paginationAndSortingInputValidation,
     inputValidationResult,
     usersController.getAllUsers.bind(usersController)
 );
 
 usersRouter.post('/',
-    basicAuthMiddleware,
+    // basicAuthMiddleware,
     userInputDtoValidation,
     inputValidationResult,
     usersController.createUser.bind(usersController)
 );
 
 usersRouter.delete('/:id',
-    basicAuthMiddleware,
+    // basicAuthMiddleware,
     idValidation,
     inputValidationResult,
     usersController.deleteUser.bind(usersController)
