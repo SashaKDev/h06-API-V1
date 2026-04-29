@@ -11,18 +11,25 @@ import {bearerAuthMiddleware} from "../../auth/middlewares/bearerAuthMiddleware.
 import {PostsController} from "./handlers/postsController.js";
 import {container} from "../../composition-root.js";
 import {lightBearerAuthMiddleware} from "../../auth/middlewares/lightBearerAuthMiddleware.js";
+import {likeStatusInputValidation} from "../../comments/validation/likeStatusInputValidation.js";
 
 const postsController = container.get(PostsController);
 
 export const postsRouter = Router({});
 
 postsRouter.get('/',
+    lightBearerAuthMiddleware,
     paginationAndSortingInputValidation,
     inputValidationResult,
     postsController.getAllPosts.bind(postsController)
 );
 
-postsRouter.get('/:id', postsController.getPost.bind(postsController));
+postsRouter.get('/:id',
+    lightBearerAuthMiddleware,
+    idValidation,
+    inputValidationResult,
+    postsController.getPost.bind(postsController)
+);
 
 postsRouter.post('/',
     // basicAuthMiddleware,
@@ -37,6 +44,14 @@ postsRouter.put('/:id',
     postInputDtoValidation,
     inputValidationResult,
     postsController.updatePost.bind(postsController)
+);
+
+postsRouter.put('/:id/like-status',
+    bearerAuthMiddleware,
+    idValidation,
+    likeStatusInputValidation,
+    inputValidationResult,
+    postsController.changeLikeStatus.bind(postsController)
 );
 
 postsRouter.delete('/:id',
