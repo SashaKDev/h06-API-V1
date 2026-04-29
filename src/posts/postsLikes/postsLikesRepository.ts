@@ -1,5 +1,4 @@
 import {injectable} from "inversify";
-import {PostDocument} from "../types/postDocument.js";
 
 import {PostLikeDocument, PostsLikesModel} from "./postsLikesModel.js";
 

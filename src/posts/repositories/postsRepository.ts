@@ -1,7 +1,6 @@
 import {Post} from "../types/post.js";
 import {PostInputDto} from "../dto/post-input.dto.js";
-import {ObjectId, WithId} from "mongodb";
-import {postsCollection} from "../../db/mongo.db.js";
+import {ObjectId} from "mongodb";
 import {injectable} from "inversify";
 import {PostModel} from "../model/postsModel.js";
 import {PostDocument} from "../types/postDocument.js";
