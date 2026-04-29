@@ -8,6 +8,9 @@ import {inject} from "inversify";
 import {matchedData} from "express-validator";
 import {CommentsPaginationData} from "../../../comments/types/commentsPaginationData.js";
 import {UsersRepository} from "../../../users/repository/usersRepository.js";
+import {PostsLikesRepository} from "../../postsLikes/postsLikesRepository.js";
+import {UserDocument} from "../../../users/types/userDocument.js";
+import {constructFromSymbol} from "date-fns/constants";
 
 export class PostsController {
 
@@ -15,7 +18,8 @@ export class PostsController {
                 @inject(CommentsQueryRepository) protected commentsQueryRepository: CommentsQueryRepository,
                 @inject(PostsService) protected postsService: PostsService,
                 @inject(PostsQueryRepository) protected postsQueryRepository: PostsQueryRepository,
-                @inject(UsersRepository) protected usersRepository: UsersRepository) {
+                @inject(UsersRepository) protected usersRepository: UsersRepository,
+                @inject(PostsLikesRepository) protected postsLikesRepository: PostsLikesRepository) {
     }
 
     async createCommentForPost(req: Request, res: Response) {
@@ -72,15 +76,49 @@ export class PostsController {
         const pageNumber = Number(data.pageNumber);
         const sortBy = data.sortBy;
         const sortDirection = data.sortDirection;
+        const userId = req.userId;
 
         const foundPostsWithPaginator = await this.postsQueryRepository.findAll(pageSize, pageNumber, sortDirection, sortBy);
+
+        for (const post of foundPostsWithPaginator.items) {
+
+            if (userId) {
+
+                const foundLike = await this.postsLikesRepository.findLike(userId, post.id)
+                if (foundLike) {
+                    post.extendedLikesInfo.myStatus = foundLike.status
+                }
+
+            }
+
+            const newestLikes = await this.postsLikesRepository.findNewestLikesForPost(post.id, 3)
+            console.log(newestLikes)
+            for (const like of newestLikes) {
+                const user = await this.usersRepository.findById(like.userId)
+                if (!user) {
+                    post.extendedLikesInfo.newestLikes.push({
+                        addedAt: like.createdAt,
+                        userId: like.userId,
+                        login: "deleted user"
+                    })
+                } else {
+                    post.extendedLikesInfo.newestLikes.push({
+                        addedAt: like.createdAt,
+                        userId: like.userId,
+                        login: user.login
+                    })
+                }
+
+            }
+
+        }
 
         res
             .status(200)
             .json(foundPostsWithPaginator);
     }
 
-    async getCommentsForPost (req: Request, res: Response) {
+    async getCommentsForPost(req: Request, res: Response) {
         const userId = req.userId;
         const data = matchedData(req, {locations: ['query']});
 
@@ -124,11 +162,47 @@ export class PostsController {
     }
 
     async getPost(req: Request, res: Response) {
-        const foundPostViewModel = await this.postsQueryRepository.findById(req.params.id);
+        const userId = req.userId;
+        const postId = req.params.id;
+
+        const foundPostViewModel = await this.postsQueryRepository.findById(postId);
+
         if (!foundPostViewModel) {
             res.sendStatus(404);
             return;
         }
+
+
+        if (userId) {
+            const foundLike = await this.postsLikesRepository.findLike(userId, postId);
+            if (!foundLike) {
+                foundPostViewModel.extendedLikesInfo.myStatus = "None"
+            } else {
+                foundPostViewModel.extendedLikesInfo.myStatus = foundLike.status;
+            }
+
+        }
+
+        const newestLikes = await this.postsLikesRepository.findNewestLikesForPost(postId, 3)
+        console.log(newestLikes);
+        const mappedNewestLikes = await Promise.all(newestLikes.map(async (like) => {
+            const user = await this.usersRepository.findById(like.userId)
+            if (!user) {
+                return {
+                    addedAt: like.createdAt,
+                    userId: like.userId,
+                    login: "deleted user",
+                }
+            }
+            return {
+                addedAt: like.createdAt,
+                userId: like.userId,
+                login: user.login,
+            }
+        }))
+        foundPostViewModel.extendedLikesInfo.newestLikes = mappedNewestLikes;
+        console.log(foundPostViewModel)
+
         res
             .status(200)
             .json(foundPostViewModel);
@@ -150,5 +224,18 @@ export class PostsController {
 
         res.sendStatus(204);
 
+    }
+
+    async changeLikeStatus(req: Request, res: Response) {
+        const userId = req.userId as string;
+        const likeStatus = req.body.likeStatus;
+        const postId = req.params.id;
+
+        const changeResult = await this.postsService.changeLikeStatus(userId, postId, likeStatus);
+        if (!changeResult) {
+            res.sendStatus(404);
+            return;
+        }
+        res.sendStatus(204);
     }
 }
