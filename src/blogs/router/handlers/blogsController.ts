@@ -7,24 +7,28 @@ import {PostInputDto} from "../../../posts/dto/post-input.dto.js";
 import {PostsService} from "../../../posts/application/postsService.js";
 import {PostsQueryRepository} from "../../../posts/repositories/postsQueryRepository.js";
 import {matchedData} from "express-validator";
+import {UsersRepository} from "../../../users/repository/usersRepository.js";
+import {PostsLikesRepository} from "../../../posts/postsLikes/postsLikesRepository.js";
 
 export class BlogsController {
 
     constructor(@inject(BlogsService) protected blogsService: BlogsService,
                 @inject(BlogsQueryRepository) protected blogsQueryRepository: BlogsQueryRepository,
                 @inject(PostsService) protected postsService: PostsService,
-                @inject(PostsQueryRepository) protected postsQueryRepository: PostsQueryRepository,) {
+                @inject(PostsQueryRepository) protected postsQueryRepository: PostsQueryRepository,
+                @inject(UsersRepository) protected usersRepository: UsersRepository,
+                @inject(PostsLikesRepository) protected postsLikesRepository: PostsLikesRepository,) {
     }
 
     async createBlog(req: Request, res: Response) {
 
-        const newBlog: BlogInputDto = {
+        const newBlogDto: BlogInputDto = {
             name: req.body.name,
             description: req.body.description,
             websiteUrl: req.body.websiteUrl,
         }
 
-        const createdBlogId = await this.blogsService.create(newBlog);
+        const createdBlogId = await this.blogsService.create(newBlogDto);
         const createdBlogViewModel = await this.blogsQueryRepository.findById(createdBlogId);
 
         res
@@ -91,7 +95,7 @@ export class BlogsController {
     }
 
     async getBlogPosts(req: Request, res: Response) {
-
+        const userId = req.userId;
         const data = matchedData(req, {locations: ['query']});
 
         const foundBlog = await this.blogsQueryRepository.findById(req.params.id);
@@ -105,11 +109,42 @@ export class BlogsController {
         const sortDirection = data.sortDirection;
         const sortBy = data.sortBy;
 
-        const foundPosts = await this.postsQueryRepository.findAllForBlog(req.params.id, pageNumber, pageSize, sortBy, sortDirection);
+        const foundPostsWithPaginator = await this.postsQueryRepository.findAllForBlog(req.params.id, pageNumber, pageSize, sortBy, sortDirection);
+        for (const post of foundPostsWithPaginator.items) {
 
+            if (userId) {
+
+                const foundLike = await this.postsLikesRepository.findLike(userId, post.id)
+                if (foundLike) {
+                    post.extendedLikesInfo.myStatus = foundLike.status
+                }
+
+            }
+
+            const newestLikes = await this.postsLikesRepository.findNewestLikesForPost(post.id, 3)
+            console.log(newestLikes)
+            for (const like of newestLikes) {
+                const user = await this.usersRepository.findById(like.userId)
+                if (!user) {
+                    post.extendedLikesInfo.newestLikes.push({
+                        addedAt: like.createdAt,
+                        userId: like.userId,
+                        login: "deleted user"
+                    })
+                } else {
+                    post.extendedLikesInfo.newestLikes.push({
+                        addedAt: like.createdAt,
+                        userId: like.userId,
+                        login: user.login
+                    })
+                }
+
+            }
+
+        }
         res
             .status(200)
-            .json(foundPosts);
+            .json(foundPostsWithPaginator);
 
     }
 

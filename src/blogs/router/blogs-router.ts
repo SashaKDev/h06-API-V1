@@ -9,6 +9,7 @@ import {
 import {postInputDtoValidation} from "../../posts/validation/postInputDtoValidation.js";
 import {BlogsController} from "./handlers/blogsController.js";
 import {container} from "../../composition-root.js";
+import {lightBearerAuthMiddleware} from "../../auth/middlewares/lightBearerAuthMiddleware.js";
 
 const blogsController = container.get(BlogsController);
 
@@ -27,6 +28,7 @@ blogsRouter.get('/:id',
 );
 
 blogsRouter.get('/:id/posts',
+    lightBearerAuthMiddleware,
     idValidation,
     paginationAndSortingInputValidation,
     inputValidationResult,
