@@ -9,8 +9,6 @@ import {matchedData} from "express-validator";
 import {CommentsPaginationData} from "../../../comments/types/commentsPaginationData.js";
 import {UsersRepository} from "../../../users/repository/usersRepository.js";
 import {PostsLikesRepository} from "../../postsLikes/postsLikesRepository.js";
-import {UserDocument} from "../../../users/types/userDocument.js";
-import {constructFromSymbol} from "date-fns/constants";
 
 export class PostsController {
 

@@ -1,8 +1,5 @@
-import {Post} from "../types/post.js";
-import {WithId} from "mongodb";
 import {PostViewModel} from "../types/postViewModel.js";
 import {PostDocument} from "../types/postDocument.js";
-import now = jest.now;
 
 
 export const mapPostToViewModel = (post: PostDocument): PostViewModel => {
