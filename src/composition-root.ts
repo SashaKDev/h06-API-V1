@@ -19,6 +19,7 @@ import {BlogsRepository} from "./blogs/repositories/blogsRepository.js";
 import {BlogsQueryRepository} from "./blogs/repositories/blogsQueryRepository.js";
 import {BlogsService} from "./blogs/application/blogsService.js";
 import {BlogsController} from "./blogs/router/handlers/blogsController.js";
+import {PostsLikesRepository} from "./posts/postsLikes/postsLikesRepository.js";
 
 // export const usersRepository = new UsersRepository();
 // export const usersQueryRepository = new UsersQueryRepository();
@@ -44,6 +45,7 @@ container.bind(BlogsController).to(BlogsController);
 
 container.bind(PostsQueryRepository).to(PostsQueryRepository);
 container.bind(PostsRepository).to(PostsRepository);
+container.bind(PostsLikesRepository).to(PostsLikesRepository);
 container.bind(PostsService).to(PostsService);
 container.bind(PostsController).to(PostsController);
 

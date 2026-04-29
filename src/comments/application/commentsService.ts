@@ -19,10 +19,11 @@ export class CommentsService {
             return null;
         }
         const user = await this.usersRepository.findById(userId);
-        console.log(user)
+
         if (!user) {
             return null;
         }
+
         const commentDto: CommentType = {
             postId: postId,
             content: comment,
