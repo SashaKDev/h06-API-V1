@@ -4,7 +4,7 @@ import {PostInputDto} from "../dto/post-input.dto.js";
 import {BlogsService} from "../../blogs/application/blogsService.js";
 import {inject, injectable} from "inversify";
 import {PostDocument} from "../types/postDocument.js";
-import {LikeStatuses, PostsLikesModel} from "../postsLikes/postsLikesModel.js";
+import {PostsLikesModel} from "../postsLikes/postsLikesModel.js";
 import {PostsLikesRepository} from "../postsLikes/postsLikesRepository.js";
 
 @injectable()
