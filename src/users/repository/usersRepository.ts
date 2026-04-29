@@ -7,9 +7,7 @@ import {UserDocument} from "../types/userDocument.js";
 @injectable()
 export class UsersRepository {
     async findById(id: string): Promise<UserDocument | null> {
-        console.log(id)
         const user = await UserModel.findById(id)
-        console.log(user);
         return user;
     }
 
