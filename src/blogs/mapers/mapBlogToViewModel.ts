@@ -1,5 +1,5 @@
 import {BlogViewModel} from "../types/blogsViewModel.js";
-import {BlogDocument} from "../types/blogDocument.js";
+import {BlogDocument} from "../model/blogModel.js";
 
 export const mapBlogToViewModel = (blog: BlogDocument): BlogViewModel => {
     return{
