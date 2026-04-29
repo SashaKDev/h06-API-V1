@@ -5,6 +5,7 @@ import {PostsViewModelWithPaginator} from "../types/postsViewModelWithPaginator.
 import {ObjectId} from "mongodb";
 import {PostViewModel} from "../types/postViewModel.js";
 import {injectable} from "inversify";
+import {PostModel} from "../model/postsModel.js";
 
 @injectable()
 export class PostsQueryRepository {
@@ -13,14 +14,14 @@ export class PostsQueryRepository {
         const skip = (pageNumber - 1) * pageSize;
         const limit = pageSize;
         const sortDirectionNumber = (sortDirection === 'desc') ? -1 : 1;
-        const posts = await postsCollection
+
+        const posts = await PostModel
                 .find()
                 .sort({[sortBy]: sortDirectionNumber})
                 .skip(skip)
                 .limit(limit)
-                .toArray();
 
-        const totalCount = await postsCollection.countDocuments()
+        const totalCount = await PostModel.countDocuments()
 
         const postsViewModel = posts.map(mapPostToViewModel);
 
@@ -28,7 +29,8 @@ export class PostsQueryRepository {
     }
 
     async findById(id: string): Promise<PostViewModel | null>{
-        const post = await postsCollection.findOne({_id: new ObjectId(id)});
+        const post = await PostModel.findById(id);
+
         if (!post) {
             return null;
         }
@@ -41,14 +43,13 @@ export class PostsQueryRepository {
         const limit = pageSize;
         const sortDirectionNumber = (sortDirection === 'desc') ? -1 : 1;
 
-        const posts = await postsCollection
+        const posts = await PostModel
                     .find({blogId: id})
                     .sort({[sortBy]: sortDirectionNumber})
                     .skip(skip)
                     .limit(limit)
-                    .toArray();
 
-        const totalCount = await postsCollection.countDocuments({blogId: id})
+        const totalCount = await PostModel.countDocuments({blogId: id})
         const postsViewModel = posts.map(mapPostToViewModel);
         return mapToPostsWithPaginator(postsViewModel, totalCount, pageSize, pageNumber);
     }
