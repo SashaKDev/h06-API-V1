@@ -1,7 +1,7 @@
 import {Blog} from "../types/blog.js";
 import {BlogInputDto} from "../dto/blog-input.dto.js";
 import {injectable} from "inversify";
-import {BlogModel} from "../model/blogModel.js";
+import {BlogDocument, BlogModel} from "../model/blogModel.js";
 
 @injectable()
 export class BlogsRepository {
@@ -13,10 +13,14 @@ export class BlogsRepository {
         return blog;
     }
 
-    async create(blog: Blog): Promise<string> {
-        const insertResult = await BlogModel.insertOne(blog);
-        return insertResult.id;
+    async create(blog: BlogDocument): Promise<string> {
+        const insertResult = await BlogModel.create(blog);
+        return insertResult._id.toString();
 
+    }
+
+    async save(blog: BlogDocument): Promise<void> {
+        await blog.save()
     }
 
     async update(id: string, dto: BlogInputDto): Promise<boolean> {
